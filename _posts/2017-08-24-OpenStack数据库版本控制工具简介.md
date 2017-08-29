@@ -3,9 +3,7 @@ layout: post
 title: OpenStack数据库版本控制工具简介
 subtitle: 介绍sqlalchemy migrate以及alemebic
 catalog: true
-tags:
-     - OpenStack
-     - Python
+tags: [OpenStack, Python]
 ---
 
 ## 写在前面的话

@@ -1,18 +1,16 @@
 ---
 layout: post
-title: Openstack使用Ceph存储后端创建虚拟机快照原理剖析
-subtitle: Openstack源码分析系列
+title: OpenStack使用Ceph存储后端创建虚拟机快照原理剖析
+subtitle: OpenStack源码分析系列
 catalog: true
-tags:
-      - Openstack
-      - Ceph
+tags: [Ceph, OpenStack]
 ---
 
 ## 1.背景知识
 
 ### 1.1 Ceph基础知识
 
-Ceph是一个开源的统一分布式存储系统，最初由Sage Weill于2007年开发，其目标是设计基于POSIX的无单点故障的分布式存储系统，同时提了统一存储系统下的高可扩展的对象存储、块存储以及文件系统存储。其中rbd块存储目前最常见的应用场景之一是作为Openstack的共享分布式存储后端，为Openstack计算服务Nova、镜像服务Glance以及块存储服务Cinder提供共享的统一存储服务。RBD官方描述为：
+Ceph是一个开源的统一分布式存储系统，最初由Sage Weill于2007年开发，其目标是设计基于POSIX的无单点故障的分布式存储系统，同时提了统一存储系统下的高可扩展的对象存储、块存储以及文件系统存储。其中rbd块存储目前最常见的应用场景之一是作为OpenStack的共享分布式存储后端，为OpenStack计算服务Nova、镜像服务Glance以及块存储服务Cinder提供共享的统一存储服务。RBD官方描述为：
 
 > RBD : Ceph’s RADOS Block Devices , Ceph block devices are thin-provisioned, resizable and store data striped over multiple OSDs in a Ceph cluster.
 
@@ -24,7 +22,7 @@ rbd image还支持快照功能，通过快照保存image当前状态，方便备
 
 显然，克隆的镜像和原来的镜像是有层级依赖的，因此不允许修改parent image（这也是原来的镜像快照必须protect的原因），也不允许删除parent image。克隆出来的镜像需要保存对parent image的引用。要从子克隆镜像中删除这些到父快照的引用，需要合并所有的父镜像，即flatten操作。这类似于Qcow2镜像的commit操作。flatten操作会拷贝所有父镜像的对象到自己的image中，这会耗费大量的网络IO，取决于image大小以及和父镜像的差量大小，通常需要花费数分钟的时间。flatten后的image不再与父镜像共享对象，因此占用的存储空间大幅度增大。
 
-### 1.2 Openstack创建虚拟机镜像过程
+### 1.2 OpenStack创建虚拟机镜像过程
 
 当Openstac存储后端使用本地文件系统并且不共享存储时，第一次启动虚拟机时计算节点没有需要的镜像，需要从glance仓库中拷贝镜像到本地，网络IO开销巨大，通常需要数分钟才能完成镜像的完全拷贝，因此启动虚拟机通常需要花费数分钟的时间。如果使用Qcow2镜像格式，创建快照时需要commit当前镜像与base镜像合并并且上传到Glance中，这个过程也通常需要花费数分钟的时间。
 
@@ -83,11 +81,11 @@ rbd clone 1b364055-e323-4785-8e94-ebef1553a33b@snap fe4c108a-7ba0-4238-9953-15a7
 </disk>
 ```
 
-以上分析了使用Ceph做Openstack存储后端启动虚拟机的原理并阐述了为什么能够在秒级内创建虚拟机的原因。但是即使创建虚拟机能够秒级完成，当我们创建虚拟机快照时却往往需要花费数分钟的时间。为了弄清楚为什么创建虚拟机快照这么慢，需要深入研究创建虚拟机快照的原理，完成了哪些工作。本文接下来将从源码入手，分析创建虚拟机快照的过程。
+以上分析了使用Ceph做OpenStack存储后端启动虚拟机的原理并阐述了为什么能够在秒级内创建虚拟机的原因。但是即使创建虚拟机能够秒级完成，当我们创建虚拟机快照时却往往需要花费数分钟的时间。为了弄清楚为什么创建虚拟机快照这么慢，需要深入研究创建虚拟机快照的原理，完成了哪些工作。本文接下来将从源码入手，分析创建虚拟机快照的过程。
 
 ## 2. 源码分析
 
-创建虚拟机快照的实现在`nova/compute/manager.py`的`snapshot_instance`方法，如果不了解Openstack项目源码结构可以参考[如何优雅的阅读openstack源代码?](https://www.zhihu.com/question/50040895/answer/119633695)。该方法更新task state后调用了`_snapshot_instance`方法后:
+创建虚拟机快照的实现在`nova/compute/manager.py`的`snapshot_instance`方法，如果不了解OpenStack项目源码结构可以参考[如何优雅的阅读openstack源代码?](https://www.zhihu.com/question/50040895/answer/119633695)。该方法更新task state后调用了`_snapshot_instance`方法后:
 
 ```python
  def _snapshot_instance(self, context, image_id, instance,
@@ -245,4 +243,4 @@ rbd snap protect  pool-yy/image_id@snap
 
 ## 4. 总结
 
-本文首先介绍了ceph基础知识以及Openstack创建虚拟机镜像的过程，然后从源码分析了为什么创建虚拟机快照需要花费很长时间的原因，最后讨论了为什么创建虚拟机快照需要flatten操作。
+本文首先介绍了ceph基础知识以及OpenStack创建虚拟机镜像的过程，然后从源码分析了为什么创建虚拟机快照需要花费很长时间的原因，最后讨论了为什么创建虚拟机快照需要flatten操作。

@@ -2,9 +2,7 @@
 layout: post
 title: 使用Docker一键部署Ceph测试环境
 catalog: true
-tags: 
-     - Docker
-     - Ceph
+tags: [Ceph, Docker]
 ---
 
 Ceph是开源统一分布式存储系统，最初是Sage Weil在UCSC的PhD研究内容，目前由Inktank公司掌控Ceph的开发。Ceph同时支持块存储、对象存储以及文件系统存储，并且具有高扩展性、高可靠性、高性能的优点。Ceph目前最广泛的使用场景之一是作为Openstack的存储后端，为Openstack提供统一共享分布式存储服务。Openstack组件中Nova、Glance、Cinder都支持对接Ceph RBD. Ceph的多节点部署可参考[Ubuntu环境部署多节点Ceph集群](http://int32bit.me/2016/04/15/%E4%BD%BF%E7%94%A8ubuntu%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2ceph%E9%9B%86%E7%BE%A4/)。

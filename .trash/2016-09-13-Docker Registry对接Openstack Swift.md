@@ -1,11 +1,8 @@
 ---
 layout: post
-title: Docker Registry对接Openstack Swift
+title: Docker Registry对接OpenStack Swift
 catalog: false
-tags:
-     - Docker
-     - Harbor
-     - Openstack
+tags: [Docker, OpenStack]
 ---
 
 Docker Registry默认使用本地文件系统存储镜像文件，路径为`/var/lib/registry`。事实上Docker Registry支持多种存储后端，参考[官方文档](https://docs.docker.com/registry/configuration/)，支持的存储后端列表如下:
@@ -15,12 +12,12 @@ Docker Registry默认使用本地文件系统存储镜像文件，路径为`/var
 * azure
 * gcs：Google存储系统
 * S3
-* Openstack Swift
+* OpenStack Swift
 * oss
 
 **注意Docker Registry同时只能支持一个存储后端，不能同时配置多个，否则出错。**
 
-下面以对接`Openstack Swift`为例，配置文件为:
+下面以对接`OpenStack Swift`为例，配置文件为:
 
 ```yaml
 version: 0.1

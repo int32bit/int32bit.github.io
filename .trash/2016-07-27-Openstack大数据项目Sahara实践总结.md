@@ -120,9 +120,9 @@ GRANT ALL PRIVILEGES ON sahara.* TO 'nova'@'%' \
 openstack user create --domain default --password SAHARA_PASS sahara # 注意替换密码
 openstack role add --project services --user sahara admin
 openstack service create --name sahara --description "Sahara Data Processing"  data-processing
-openstack endpoint create --region RegionOne data-processing public http://lb.103.hatest.ustack.in:8386/v1.1/%\(tenant_id\)s # 注意替换地址
-openstack endpoint create --region RegionOne data-processing internal http://lb.103.hatest.ustack.in:8386/v1.1/%\(tenant_id\)s # 注意替换地址
-openstack endpoint create --region RegionOne data-processing admin http://lb.103.hatest.ustack.in:8386/v1.1/%\(tenant_id\)s # 注意替换地址
+openstack endpoint create --region RegionOne data-processing public http://lb.103.hatest.int32bit.in:8386/v1.1/%\(tenant_id\)s # 注意替换地址
+openstack endpoint create --region RegionOne data-processing internal http://lb.103.hatest.int32bit.in:8386/v1.1/%\(tenant_id\)s # 注意替换地址
+openstack endpoint create --region RegionOne data-processing admin http://lb.103.hatest.int32bit.in:8386/v1.1/%\(tenant_id\)s # 注意替换地址
 ```
 
 #### 2.1.3 安装sahara包

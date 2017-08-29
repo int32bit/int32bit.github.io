@@ -2,8 +2,7 @@
 layout: post
 title: 如何阅读OpenStack源码
 catalog: true
-tags:
-     - OpenStack
+tags: [OpenStack]
 ---
 
 ## 1 OpenStack基础

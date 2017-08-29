@@ -1,10 +1,7 @@
 ---
 layout: post
 title: 虚拟机、Docker和Hyper技术比较
-subtitle: "Hyper_：又一种新的虚拟化技术"
-catalog: true
-tags:
-     - Docker
+tags: [Docker]
 ---
 
 ## 操作系统

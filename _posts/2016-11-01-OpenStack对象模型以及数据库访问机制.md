@@ -1,15 +1,13 @@
 ---
 layout: post
-title: 深入研究Openstack Nova组件对象模型以及数据库访问机制
-subtitle: Openstack源码分析系列
+title: OpenStack Nova组件对象模型以及数据库访问机制
 catalog: true
-tags:
-     - Openstack
+tags: [OpenStack]
 ---
 
 ## 1. 背景介绍
 
-在Openstack G版以前，Nova的所有服务（包括nova-compute服务）都是直接访问数据库的，数据库访问接口在nova/db/api.py模块中实现，而该模块只是调用了IMPL的方法，即该模块只是一个代理，真正实现由IMPL实现，IMPL是一个可配置的动态加载驱动模块，通常使用Python sqlalchemy库实现，对应的代码为`nova.db.sqlalchemy.api`：
+在OpenStack G版以前，Nova的所有服务（包括nova-compute服务）都是直接访问数据库的，数据库访问接口在nova/db/api.py模块中实现，而该模块只是调用了IMPL的方法，即该模块只是一个代理，真正实现由IMPL实现，IMPL是一个可配置的动态加载驱动模块，通常使用Python sqlalchemy库实现，对应的代码为`nova.db.sqlalchemy.api`：
 
 ```pythohn
 _BACKEND_MAPPING = {'sqlalchemy': 'nova.db.sqlalchemy.api'}
@@ -55,7 +53,7 @@ def main():
 
 如果设置use_local为true，则`indirection_api`为None，否则将初始化为`conductor_rpcapi.ConductorAPI`，从这里我们也可以看出调用conductor的入口。
 
-我们可能会想到说在对象模型访问数据库时会有一堆if-else来判断是否使用use_local，事实上是否这样呢，我们接下来将分析源码，从而理解Openstack的设计理念。
+我们可能会想到说在对象模型访问数据库时会有一堆if-else来判断是否使用use_local，事实上是否这样呢，我们接下来将分析源码，从而理解OpenStack的设计理念。
 
 ## 3. 源码分析
 
@@ -204,4 +202,4 @@ instance.destroy()
 
 ## 5. 总结
 
-本文首先介绍了Openstack Nova组件数据库访问的发展历程，然后基于源码分析了当前Nova访问数据库的过程，最后解释了Nova使用软删除的原因。
+本文首先介绍了OpenStack Nova组件数据库访问的发展历程，然后基于源码分析了当前Nova访问数据库的过程，最后解释了Nova使用软删除的原因。

@@ -1,15 +1,13 @@
 ---
 layout: post
-title: Openstack使用ISO镜像启动云主机
-subtitle: 介绍了安装ISO镜像的原理以及Openstack启动云主机的几种方式
+title: OpenStack使用ISO镜像启动云主机
 catalog: true
-tags:
-     - Openstack
+tags: [OpenStack]
 ---
 
 ## 1. 基础知识
 
-大多数Openstack新手都很疑惑一个问题，为什么Openstack只能上传qcow2、raw格式镜像，而不是我们装系统的ISO格式镜像。其实Openstack原生支持ISO镜像格式，只是使用方法和直接使用qcow2、raw等格式会有点不同，造成差异的原因是ISO镜像和其它镜像的不同。
+大多数OpenStack新手都很疑惑一个问题，为什么OpenStack只能上传qcow2、raw格式镜像，而不是我们装系统的ISO格式镜像。其实OpenStack原生支持ISO镜像格式，只是使用方法和直接使用qcow2、raw等格式会有点不同。
 
 ### 1.1 什么是ISO镜像
 
@@ -32,9 +30,9 @@ ISO文件是电脑上光盘镜像存储格式之一，它是根据ISO-9660有关
 
 我们从以上过程可以看出，ISO本质就是提供安装操作系统的一系列工具，负责把操作系统安装在硬盘(/dev/sda)上，并安装引导程序grub到硬盘MBR中。
 
-### 1.3 制作Openstack镜像流程
+### 1.3 制作OpenStack镜像流程
 
-我们再回顾下制作Openstack镜像流程，仍然以ubuntu 14.04为例，参考[Openstack官方文档](http://docs.openstack.org/image-guide/ubuntu-image.html),主要包括以下几个过程:
+我们再回顾下制作OpenStack镜像流程，仍然以ubuntu 14.04为例，参考[OpenStack官方文档](http://docs.openstack.org/image-guide/ubuntu-image.html),主要包括以下几个过程:
 
 * 在官方网站下载ubuntu 14.04 ISO镜像。
 * 使用qemu-img工具创建一个虚拟硬盘。
@@ -64,13 +62,13 @@ virt-install --virt-type kvm --name trusty --ram 1024 \
 * 上传qcow2到glance中即可。
  
 
-我们从以上步骤可以看出，基本和安装操作系统到物理机过程大体相同，区别在于前者把操作系统安装在物理硬盘上，而后者把操作系统固定安装在虚拟硬盘中。我们的qcow2、raw等文件本质就是虚拟机的虚拟硬盘（相当于/dev/sda），制作镜像时本质就是把操作系统安装在虚拟硬盘了，因此我们使用Openstack启动虚拟机，并不需要执行一系列安装过程，直接就能启动了。
+我们从以上步骤可以看出，基本和安装操作系统到物理机过程大体相同，区别在于前者把操作系统安装在物理硬盘上，而后者把操作系统固定安装在虚拟硬盘中。我们的qcow2、raw等文件本质就是虚拟机的虚拟硬盘（相当于/dev/sda），制作镜像时本质就是把操作系统安装在虚拟硬盘了，因此我们使用OpenStack启动虚拟机，并不需要执行一系列安装过程，直接就能启动了。
 
-## 2. Openstack云主机启动方式
+## 2. OpenStack云主机启动方式
 
-我们从Openstack Dashboard上可以看出Openstack启动虚拟机的几种方式:
+我们从OpenStack Dashboard上可以看出OpenStack启动虚拟机的几种方式:
 
-![instance boot sources](/img/posts/Opentack使用ISO镜像启动云主机/1.png)
+![instance boot sources](/img/posts/OpenStack使用ISO镜像启动云主机/1.png)
 
 我们排除boot from snapshot和boot from volume snapshot两种启动方式，因为这两者和直接boot from image和boot from volume是一样的，区别在于从image本身启动还是从快照启动。因此实际上我们主要归纳为三种启动方式:
 
@@ -164,7 +162,7 @@ nova boot --flavor m1.small \
 ```
 使用`nova show`查看信息:
 
-![boot from volume](/img/posts/Opentack使用ISO镜像启动云主机/2.png)
+![boot from volume](/img/posts/OpenStack使用ISO镜像启动云主机/2.png)
 
 从nova信息的image项看出，由于没有指定image，因此尝试从volume启动。
 
@@ -213,7 +211,7 @@ nova boot --flavor $FLAVOR_ID --image $IMAGE_ID \
 
 由前面可知，当同时指定了image和volume时会优先从image启动，查看info:
 
-![Boot instance from image and attach non-bootable volume](/img/posts/Opentack使用ISO镜像启动云主机/3.png)
+![Boot instance from image and attach non-bootable volume](/img/posts/OpenStack使用ISO镜像启动云主机/3.png)
 
 使用virsh命令查看:
 
@@ -235,13 +233,13 @@ nova volume-detach 78ae95b1-ef47-4391-bb6f-a020df47ebbe 739bfe68-052a-4b6e-bfb0-
 # 卸载成功
 ```
 
-以上详细介绍了Openstack的三种云主机启动方式，接下来将开始介绍如何在Openstack平台上使用ISO镜像安装云主机。
+以上详细介绍了OpenStack的三种云主机启动方式，接下来将开始介绍如何在OpenStack平台上使用ISO镜像安装云主机。
 
 ## 3.使用ISO镜像启动云主机
 
 ### 3.1 思路
 
-我们前面介绍了Openstack启动云主机的几种方式，并详细介绍了使用ISO镜像安装操作系统的原理，简单总结下:
+我们前面介绍了OpenStack启动云主机的几种方式，并详细介绍了使用ISO镜像安装操作系统的原理，简单总结下:
 
 * ISO本质就是安装操作系统的工具，包括了一系列操作系统所依赖的文件以及安装工具
 * ISO最终会把操作系统安装到指定硬盘中，并安装启动程序到硬盘的MBR中
@@ -284,11 +282,11 @@ nova get-vnc-console 7b4190b6-efa7-4299-9fbd-23a98a77ac23 novnc
 ```
 此时进入ubuntu安装界面，如图:
 
-![install interface](/img/posts/Opentack使用ISO镜像启动云主机/4.png)
+![install interface](/img/posts/OpenStack使用ISO镜像启动云主机/4.png)
 
 按照正常流程安装系统即可，在分区设置时，可以只设置根分区即可，如图:
 
-![install interface](/img/posts/Opentack使用ISO镜像启动云主机/5.png)
+![install interface](/img/posts/OpenStack使用ISO镜像启动云主机/5.png)
 
 执行完安装过程，操作系统已经安装到空白volume卷中，原来的云主机已经没用了，我们安装操作系统也一样的道理，安装完后会移除cdrom，这里我们相当于移除image。
 
@@ -320,7 +318,7 @@ nova boot --flavor $FLAVOR_ID \
 从启动参数看，我们移除了image参数，只指定了volume。
 云主机创建成功后，打开vnc界面，如图:
 
-![install interface](/img/posts/Opentack使用ISO镜像启动云主机/6.png)
+![install interface](/img/posts/OpenStack使用ISO镜像启动云主机/6.png)
 
 我们成功地进入ubuntu系统。
 
@@ -332,7 +330,7 @@ nova boot --flavor $FLAVOR_ID \
 
 ## 4. Boot from PXE
 
-很多人可能会问，Openstack是否支持从PXE启动，即网络启动方式，遗憾的是这个bp从2013年开始提出，到现在也没有实现，[这里是bp地址](https://blueprints.launchpad.net/nova/+spec/libvirt-empty-vm-boot-pxe)。但目前有解决方案:
+很多人可能会问，OpenStack是否支持从PXE启动，即网络启动方式，遗憾的是这个bp从2013年开始提出，到现在也没有实现，[这里是bp地址](https://blueprints.launchpad.net/nova/+spec/libvirt-empty-vm-boot-pxe)。但目前有解决方案:
 
 * 在bootloader上安装ipxe,然后上传到glance镜像中，这种方式有点麻烦，排除。
 * 在xml文件中os node增加network启动项:
@@ -348,13 +346,13 @@ nova boot --flavor $FLAVOR_ID \
 
 以上可以直接通过virsh edit命令修改，然后重启，使用vnc查看:
 
-![boot from pxe](/img/posts/Opentack使用ISO镜像启动云主机/7.png)
+![boot from pxe](/img/posts/OpenStack使用ISO镜像启动云主机/7.png)
 
 我们若hd启动失败，则会尝试从pxe启动，只是我们pxe没有部署，因此也启动失败了。
 
 以上是临时解决办法，若需要永久生效，需要修改nova源码了, 最简单的patch为:
 
-![patch pxe](/img/posts/Opentack使用ISO镜像启动云主机/8.png)
+![patch pxe](/img/posts/OpenStack使用ISO镜像启动云主机/8.png)
 
 ## 参考文献
 

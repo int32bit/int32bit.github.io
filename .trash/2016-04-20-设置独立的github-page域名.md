@@ -1,9 +1,8 @@
 ---
 layout: post
-title: 自定义github-page域名
+title: 设置独立的github page域名
 catalog: true
-tags:
-     - Linux
+tags: [Linux]
 ---
 
 ## 1.申请域名

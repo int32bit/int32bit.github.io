@@ -2,17 +2,16 @@
 layout: post
 title: 聊聊Nova Compute Driver的那些趣事
 catalog: true
-tags:
-     - Openstack
+tags: [OpenStack]
 ---
 
-## Openstack设计准则
+## OpenStack设计准则
 
-OpenStack是一个开源云计算平台项目，旨在为公共及私有云的建设与管理提供软件的开源实现。可扩展性和弹性是Openstack设计的准则之一，即Openstack的各个组件以及组件内部的模块都应该是可插拔的，并且可以随意的增加插件而不需要修改已有的接口。Driver机制就是其中的一个很好的例子，Nova通过不同的driver支持不同的hypervisor，Cinder通过不同的driver支持不同的存储后端，Neutron通过各种agent支持不同的网络类型，Sahara通过各种plugin支持不同的Hadoop发行版等等，在Openstack几乎处处存在这样的影子。所有的driver都是可配置的，通过配置不同的driver，各个组件就能注册不同的驱动，从而支持不同的资源类型。
+OpenStack是一个开源云计算平台项目，旨在为公共及私有云的建设与管理提供软件的开源实现。可扩展性和弹性是OpenStack设计的准则之一，即OpenStack的各个组件以及组件内部的模块都应该是可插拔的，并且可以随意的增加插件而不需要修改已有的接口。Driver机制就是其中的一个很好的例子，Nova通过不同的driver支持不同的hypervisor，Cinder通过不同的driver支持不同的存储后端，Neutron通过各种agent支持不同的网络类型，Sahara通过各种plugin支持不同的Hadoop发行版等等，在OpenStack几乎处处存在这样的影子。所有的driver都是可配置的，通过配置不同的driver，各个组件就能注册不同的驱动，从而支持不同的资源类型。
 
 ## 何谓Compute Driver
 
-说到Nova，相信大家都会想到它的功能就是管虚拟机的，甚至无意识地和Libvirt、QEMU、KVM等概念自动关联起来。我基本每次面试都会问及Nova的实现原理，大多数面试者都能回答说：Nova的原理嘛，就是调用Libvirt的API管理QEMU/KVM虚拟机。是的，我们部署Openstack时大都会使用libvirt driver，以至于很多人都误以为**Nova只是Libvirt的封装，Nova只能管理虚拟机**。可事实上，Nova的功能远非如此，我特别需要强调的是：
+说到Nova，相信大家都会想到它的功能就是管虚拟机的，甚至无意识地和Libvirt、QEMU、KVM等概念自动关联起来。我基本每次面试都会问及Nova的实现原理，大多数面试者都能回答说：Nova的原理嘛，就是调用Libvirt的API管理QEMU/KVM虚拟机。是的，我们部署OpenStack时大都会使用libvirt driver，以至于很多人都误以为**Nova只是Libvirt的封装，Nova只能管理虚拟机**。可事实上，Nova的功能远非如此，我特别需要强调的是：
 
 * Libvirt只是众多compute driver的其中一种。
 * Nova可管的不仅仅是虚拟机。
@@ -72,11 +71,11 @@ OpenStack是一个开源云计算平台项目，旨在为公共及私有云的�
 
 **Nova可管的不仅仅是虚拟机。**这很有趣，甚至难以置信，但这却是事实。Nova管理的除了虚拟机之外的东西，有些可能只是一种尝试，有些早已成为了历史，也有些独立门户。带着好奇心，不妨好好盘点下Nova除了能管虚拟机，还能管理哪些有趣的玩意。
 
-## Openstack
+## OpenStack
 
-有人看到这，开始质疑这里标题是不是错了，明明是谈Nova能管什么，怎么突然岔开话题谈Openstack，Nova不是Openstack其中一个组件么？难道Nova管理Nova？不管你信不信，这是真的。其实原理很简单，把Compute Driver的所有实现替换为对另一个Nova API调用即可。比如spawn()方法，转化为对另一个Nova API的`"POST /servers"`请求。我们把这种模式称作级联Openstack。
+有人看到这，开始质疑这里标题是不是错了，明明是谈Nova能管什么，怎么突然岔开话题谈OpenStack，Nova不是OpenStack其中一个组件么？难道Nova管理Nova？不管你信不信，这是真的。其实原理很简单，把Compute Driver的所有实现替换为对另一个Nova API调用即可。比如spawn()方法，转化为对另一个Nova API的`"POST /servers"`请求。我们把这种模式称作级联OpenStack。
 
-这有什么用呢？我们知道，Openstack目前越来越成熟稳定，但一直没能很好的支持大规模的扩展，当规模大到一定程度时，数据库、消息队列等都会成为性能瓶颈，限制了单一Openstack规模的增长。社区为此也思考了一些方案，分Region、分Cell以及前面提到的级联Openstack都是社区的一些尝试，这些尝试都是可行的，但又有其各自的问题。Region和Cell会在后续的文章中重点介绍，这里仅仅介绍下级联Openstack，官方文档参考[OpenStack cascading solution](https://wiki.openstack.org/wiki/OpenStack_cascading_solution)。其原理如图:
+这有什么用呢？我们知道，OpenStack目前越来越成熟稳定，但一直没能很好的支持大规模的扩展，当规模大到一定程度时，数据库、消息队列等都会成为性能瓶颈，限制了单一OpenStack规模的增长。社区为此也思考了一些方案，分Region、分Cell以及前面提到的级联OpenStack都是社区的一些尝试，这些尝试都是可行的，但又有其各自的问题。Region和Cell会在后续的文章中重点介绍，这里仅仅介绍下级联OpenStack，官方文档参考[OpenStack cascading solution](https://wiki.openstack.org/wiki/OpenStack_cascading_solution)。其原理如图:
 
 ![cascading openstack](/img/posts/聊聊Nova-compute-driver的那些趣事/cascading.png)
 
@@ -84,17 +83,17 @@ OpenStack是一个开源云计算平台项目，旨在为公共及私有云的�
 
 ![cascading openstack 2](/img/posts/聊聊Nova-compute-driver的那些趣事/cascading2.png)
 
-理论上，这种方法可以无限扩展Openstack的节点，没有规模限制。事实上，部署和实现上还是存在不少挑战问题的，比如如何同步各个child集群的信息以及网络通信等。
+理论上，这种方法可以无限扩展OpenStack的节点，没有规模限制。事实上，部署和实现上还是存在不少挑战问题的，比如如何同步各个child集群的信息以及网络通信等。
 
-目前社区已经把这一部分实现逻辑单独拿出来，并新开了两个相关项目[Tricircle]((https://wiki.openstack.org/wiki/Tricircle)以及[Trio2o](https://wiki.openstack.org/wiki/Trio2o)，二者基本都是由华为在主导，一个负责网络管理，另一个负责实现级联。目前这两个项目还不是特别成熟，但还是提供了一种支持大规模Openstack集群的参考。
+目前社区已经把这一部分实现逻辑单独拿出来，并新开了两个相关项目[Tricircle]((https://wiki.openstack.org/wiki/Tricircle)以及[Trio2o](https://wiki.openstack.org/wiki/Trio2o)，二者基本都是由华为在主导，一个负责网络管理，另一个负责实现级联。目前这两个项目还不是特别成熟，但还是提供了一种支持大规模OpenStack集群的参考。
 
 ## Docker
 
-Docker这几年非常火热，甚至有人说Docker会代替虚拟机，K8S会代替Openstack，虽然这种描述过于夸张，也欠缺合理性，但这却足以证明Docker的热度。
+Docker这几年非常火热，甚至有人说Docker会代替虚拟机，K8S会代替OpenStack，虽然这种描述过于夸张，也欠缺合理性，但这却足以证明Docker的热度。
 
 ![docker](/img/posts/聊聊Nova-compute-driver的那些趣事/docker.png)
 
-也因此社区很早就开始尝试集成Docker。在K版本Openstack中，Nova已经支持了Docker驱动，能够通过Nova来启动Docker容器。实现原理其实也不难，`spawn()`方法相当于调用Docker的`run`接口(其实是调用的`create()`和`start()`API)，而`destory()`方法则调用Docker的`rm`接口。其它接口与之类似。Nova的Docker驱动项目地址为[nova-docker](https://github.com/openstack/nova-docker)。
+也因此社区很早就开始尝试集成Docker。在K版本OpenStack中，Nova已经支持了Docker驱动，能够通过Nova来启动Docker容器。实现原理其实也不难，`spawn()`方法相当于调用Docker的`run`接口(其实是调用的`create()`和`start()`API)，而`destory()`方法则调用Docker的`rm`接口。其它接口与之类似。Nova的Docker驱动项目地址为[nova-docker](https://github.com/openstack/nova-docker)。
 
 但是，Docker毕竟是容器，它与虚拟机还是有差别的，使用Nova集成Docker，难以支持Docker的一些高级特性，比如link、volume等。于是又有人提出与Heat集成，通过Heat能够充分利用Docker API，但缺乏调度机制。于是干脆单独一个新的项目来专门提供容器服务，支持多租户和资源调度，这个项目名称为magnum。再后来，magnum想专注于容器编排服务，集成K8S、Docker Swarm等容器编排服务，而单容器服务则又独立一个项目Zun。
 
@@ -110,4 +109,4 @@ Nova既然能管理虚拟机，那肯定会有人想，能不能管理我们的�
 
 ## 总结
 
-除了以上提到的虚拟机、Openstack本身、Docker容器以及物理机，Nova未来还有可能支持更多的东西，也许现在想不到，谁又说得准以后的事呢。
+除了以上提到的虚拟机、OpenStack本身、Docker容器以及物理机，Nova未来还有可能支持更多的东西，也许现在想不到，谁又说得准以后的事呢。

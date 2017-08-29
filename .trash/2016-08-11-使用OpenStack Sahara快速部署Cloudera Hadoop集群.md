@@ -1,16 +1,13 @@
 ---
 layout: post
-title: 使用Openstack Sahara快速部署Cloudera Hadoop集群
+title: 使用OpenStack Sahara快速部署Cloudera Hadoop集群
 catalog: true
-tags: 
-     - Openstack
-     - Sahara
-     - Hadoop
+tags: [Hadoop, OpenStack] 
 ---
 
 ## 1.Cloudera 简介
 
-Cloudera（英语：Cloudera, Inc.）是一家位于美国的软件公司，向企业客户提供基于Apache Hadoop的软件、支持、服务以及培训。对应Openstack，类似Mirantis公司。
+Cloudera（英语：Cloudera, Inc.）是一家位于美国的软件公司，向企业客户提供基于Apache Hadoop的软件、支持、服务以及培训。对应OpenStack，类似Mirantis公司。
 
 Cloudera的开源Apache Hadoop发行版，亦即（Cloudera Distribution including Apache Hadoop，CDH），面向Hadoop企业级部署。Cloudera称，其一半以上的工程产出捐赠给了各个基于Apache许可与Hadoop紧密相连的开源项目（Apache Hive、Apache Avro、Apache HBase等等）。Cloudera还是Apache软件基金会的赞助商。
 Cloudera 提供一个可扩展、灵活、集成的平台，可用来方便地管理您的企业中快速增长的多种多样的数据。业界领先的 Cloudera 产品和解决方案使您能够部署并管理 Apache Hadoop 和相关项目、操作和分析您的数据以及保护数据的安全。
@@ -79,13 +76,13 @@ YARN_NODEMANAGER
 
 （1） 选择插件类型
 
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/1.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/1.png)
 
 如图，以上设置Plugin Name为Cloudera Plugin,Version为5.4.0。
 
 （2） 资源配置
 
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/2.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/2.png)
 如图，我们选择了自己flavor，并且指定volume为50GB，注意务必设置Floating IP Pool。
 
 （3）服务配置
@@ -113,7 +110,7 @@ YARN_NODEMANAGER
 
 另外需要注意`dfs_datanode_du_reserved`参数，这个参数表示预留给宿主机的磁盘空间，默认为10GB，即如果volume设置大小为50GB，在HDFS看到的应该是40GB。
 创建完成后，结果如图：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/3.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/3.png)
 
 ### 3.2 创建集群模板
 
@@ -125,25 +122,25 @@ cdh-slave x 3
 ```
 
 在集群模板面板点击创建按钮，选择对应的插件名称和版本后，选择node group如下：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/4.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/4.png)
 在`General Parameters`标签，如果没有部署Swift的话，去掉`Enable Swift`，因为如果开启会从互联网下载Swfit 库，比较耗时间。NTP服务地址建议也填上，XFS不需要。
 
 ### 3.3 启动集群
 
 创建完集群模板，从模板启动集群，需要设置使用的镜像、网络、keypair等，如图：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/5.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/5.png)
 此时在集群列表中可查看所有的集群实例，点击对应的集群名称，可以查看详情：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/6.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/6.png)
 在Cluster Events中可查看创建集群的进度，如图：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/7.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/7.png)
 大约需要数分钟即可创建完成，创建成功后集群的status为Active。
 
 ## 4. 使用Cloudera-manager管理集群
 
 集群创建成功后，在Cluster Details面板的General Info中会有Cloudera-Manager的WebUI地址、用户名以及密码：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/8.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/8.png)
  进入Cloudera Manager Web UI，输入用户名`admin`以及密码`9e9c470c-5beb-4370-8361-0165b62286b9`登录，进入界面如图：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/9.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/9.png)
 使用Cloudera Manager可以查看服务配置、资源监控等，具体请参考官方文档http://www.cloudera.com/。
 
 ## 5. 增加Hbase服务
@@ -154,32 +151,31 @@ cdh-slave x 3
 
 添加服务的API地址为`"/cmf/clusters/1/add-service/index"`，其中`1`表示集群标号，比如Cloudera-Manager WebUI地址为10.0.103.127:7180，则添加服务的地址为:`http://10.0.103.127:7180/cmf/clusters/1/add-service/index`。
 选择Zookeeper服务然后选择继续：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/10.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/10.png)
 为了简便，我们只部署单节点Zookeeper服务，并且部署节点为master节点，实际部署时应该根据需求调整：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/11.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/11.png)
 配置完毕后会进入服务部署界面：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/12.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/12.png)
 若本地没有对应服务的parcels会自动从互联网下载到本地。
 部署成功后，如图：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/13.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/13.png)
 
 ### 5.2 部署Hbase
 
 和部署Zookeeper类似，进入服务列表后，选择Hbase服务，master节点部署Hbase Master，其他节点部署Hbase RegionServer，如图：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/14.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/14.png)
 大约需要数分钟，Hbase部署完成。
 
 ### 5.3 重启集群
 
 部署了新的服务或者更新了配置都需要重启集群才能生效，否则会警告：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/15.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/15.png)
 点击重启集群：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/16.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/16.png)
 重启集群可能需要几分钟，需要耐心等待。最后集群状态如图所示：
-![](/img/posts/使用Openstack Sahara快速部署Cloudera Hadoop集群/17.png)
+![](/img/posts/使用OpenStack Sahara快速部署Cloudera Hadoop集群/17.png)
 可见我们成功地部署了Hbase和Zookeeper服务。若需要部署其它服务，与此类似。
 
 ## 6. 关于Hadoop版本问题
 
 CDH版本直接绑定了Hadoop的服务的版本，包括HDFS版本、Hbase版本以及Spark版本等，而Sahara版本绑定了CDH版本，因此升级其中一个服务的版本相对比较服务，可以尝试手动升级，即进入虚拟机，下载新的服务版本替换原来的服务即可。
- 

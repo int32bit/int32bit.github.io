@@ -1,10 +1,8 @@
 ---
 layout: post
-title: 利用Openstack核绑定优化云主机计算性能
-subtitle: 介绍cpu pinning功能
+title: 利用OpenStack核绑定优化云主机计算性能
 catalog: true
-tags: 
-     - Openstack
+tags: [OpenStack]
 ---
 
 
@@ -18,9 +16,9 @@ tags:
 
 ## 1. 概述
 
-Openstack从K版本开始不仅支持了自定义CPU拓扑功能，比如设置socket、core、threads等，还支持CPU pinning功能，即CPU核绑定，甚至能够使虚拟机独占物理CPU，虚拟机的vCPU能够固定绑定到宿主机的指定pCPU上，在整个运行期间，不会发生CPU浮动，减少CPU切换开销，提高虚拟机的计算性能。Openstack并不允许用户显式的将一个vCPU绑定到某一pCPU上，这是由于这么做会暴露用户物理CPU拓扑信息，这有悖于IaaS的设计原则。除此之外，Openstack还支持设置threads policy，能够利用宿主机的SMT特性进一步优化宿主机的性能。
+OpenStack从K版本开始不仅支持了自定义CPU拓扑功能，比如设置socket、core、threads等，还支持CPU pinning功能，即CPU核绑定，甚至能够使虚拟机独占物理CPU，虚拟机的vCPU能够固定绑定到宿主机的指定pCPU上，在整个运行期间，不会发生CPU浮动，减少CPU切换开销，提高虚拟机的计算性能。OpenStack并不允许用户显式的将一个vCPU绑定到某一pCPU上，这是由于这么做会暴露用户物理CPU拓扑信息，这有悖于IaaS的设计原则。除此之外，OpenStack还支持设置threads policy，能够利用宿主机的SMT特性进一步优化宿主机的性能。
 
-接下来本文将详细介绍如何实现Openstack虚拟机的CPU核绑定。
+接下来本文将详细介绍如何实现OpenStack虚拟机的CPU核绑定。
 
 ## 2. 前期工作
 
@@ -107,7 +105,7 @@ systemctl restart openstack-nova-scheduler
 
 Host aggregate是compute host的集合，同一个主机集合的所有计算节点通常具有一组相同的特性，这些特性通过关联metadata来描述，比如高速网卡、GPU、SSD存储、Qos等。nova-scheduler能够过滤不满足某些特性的主机，从而只选择只具备某些特性的主机，比如只选择配置ssd的主机或者只选择具有GPU加速的主机等，这和[YARN的Label based scheduling算法](http://doc.mapr.com/display/MapR/Label-based+Scheduling+for+YARN+Applications)原理是一样的，差别仅仅是一个称为metadata，一个称为label。通过基于label的调度算法，充分考虑了异构的资源分布，能够提高资源利用率和最大吞吐量。
 
-Openstack需要首先创建主机集合，然后通过主机集合的metadata描述该集合的主机具有的特性，nova创建主机集合语法为：
+OpenStack需要首先创建主机集合，然后通过主机集合的metadata描述该集合的主机具有的特性，nova创建主机集合语法为：
 
 ```bash
 nova aggregate-create int32bit-hz int32bit-az
@@ -154,7 +152,7 @@ nova aggregate-add-host int32bit-hz server-68
 查看主机集合包含的计算节点：
 
 ```
-[root@server-32.103.hatest.ustack.in ~ ]$ nova aggregate-details int32bit-hz
+[root@server-32.103.hatest.int32bit.in ~ ]$ nova aggregate-details int32bit-hz
 +----+---------------+-------------------+--------------------------+---------------------------+
 | Id | Name          | Availability Zone | Hosts                    | Metadata                  |
 +----+---------------+-------------------+--------------------------+---------------------------+
@@ -165,7 +163,7 @@ nova aggregate-add-host int32bit-hz server-68
 设置主机集合metadata(即label):
 
 ```
-[root@server-32.103.hatest.ustack.in ~ ]$ nova aggregate-set-metadata int32bit-hz pinning_cpu=true ssd=true
+[root@server-32.103.hatest.int32bit.in ~ ]$ nova aggregate-set-metadata int32bit-hz pinning_cpu=true ssd=true
 Metadata has been successfully updated for aggregate 26.
 +----+---------------+-------------------+--------------------------+-----------------------------------------------------------+
 | Id | Name          | Availability Zone | Hosts                    | Metadata                                                  |
@@ -185,7 +183,7 @@ nova aggregate-set-metadata int32bit-test ssd
 查看主机集合的主机列表以及metadata:
 
 ```
-[root@server-32.103.hatest.ustack.in ~ ]$ nova aggregate-details int32bit-hz
+[root@server-32.103.hatest.int32bit.in ~ ]$ nova aggregate-details int32bit-hz
 +----+---------------+-------------------+--------------------------+-----------------------------------------------------------+
 | Id | Name          | Availability Zone | Hosts                    | Metadata                                                  |
 +----+---------------+-------------------+--------------------------+-----------------------------------------------------------+
@@ -460,7 +458,7 @@ linux16 /vmlinuz-3.10.0-229.1.2.el7.x86_64 root=/dev/mapper/rhel-root ro rd.lvm.
 
 1. [维基百科NUMA](https://en.wikipedia.org/wiki/Non-uniform_memory_access)
 2. [NUMA架构的CPU -- 你真的用好了么？](http://cenalulu.github.io/linux/numa/)
-3. [Openstack官方文档--Flavor](http://docs.openstack.org/admin-guide/compute-flavors.html)
-4. [CPU pinning and numa topology awareness in Openstack compute](http://redhatstackblog.redhat.com/2015/05/05/cpu-pinning-and-numa-topology-awareness-in-openstack-compute/)
+3. [OpenStack官方文档--Flavor](http://docs.openstack.org/admin-guide/compute-flavors.html)
+4. [CPU pinning and numa topology awareness in OpenStack compute](http://redhatstackblog.redhat.com/2015/05/05/cpu-pinning-and-numa-topology-awareness-in-openstack-compute/)
 5. [Simultaneous multithreading - Wikipedia](https://en.wikipedia.org/wiki/Simultaneous_multithreading)
 6. [isolcpus、numactl and taskset](https://codywu2010.wordpress.com/2015/09/27/isolcpus-numactl-and-taskset/)

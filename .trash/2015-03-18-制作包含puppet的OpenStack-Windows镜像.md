@@ -1,12 +1,9 @@
 ---
 layout: post
-title: 制作windows puppet镜像
+title: 制作包含puppet的OpenStack Windows镜像
 comments: true
-tags: [Puppet, KVM]
-category: 虚拟化
+tags: [Puppet]
 ---
-
-由于电信需要远程部署软件，拟使用puppet进行远程服务管理
 
 ## 前提
 
@@ -60,4 +57,5 @@ qemu-img convert -O qcow2 origin.qcow2 new.qcow2
 把镜像上传到glance下，记得**设置os_type = windows**否则，会出现RTC时间问题
 
 ## 启动主机
+
 启动云主机，记得设置**os_type = windows**, 原因同上！
