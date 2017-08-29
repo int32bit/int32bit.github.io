@@ -15,7 +15,7 @@ Thanks Jekyll and Github Page!
 |1|[如何阅读OpenStack源码](http://int32bit.me/2017/08/28/如何阅读OpenStack源码)|OpenStack|2017-08-28|
 |2|[OpenStack数据库版本控制工具简介](http://int32bit.me/2017/08/24/OpenStack数据库版本控制工具简介)|OpenStack|2017-08-24|
 |3|[Cinder数据卷备份原理和实践](http://int32bit.me/2017/03/30/Cinder数据卷备份原理和实践)|OpenStack|2017-03-30|
-|4|[cinder-volume如何实现AA高可用](http://int32bit.me/2017/03/16/cinder-volume如何实现AA高可用)|OpenStack|2017-03-16|
+|4|[cinder-volume服务如何实现AA高可用](http://int32bit.me/2017/03/16/cinder-volume服务如何实现AA高可用)|OpenStack|2017-03-16|
 |5|[Ceph-RBD-mirror介绍以及原理分析](http://int32bit.me/2017/01/24/Ceph-RBD-mirror介绍以及原理分析)|OpenStack|2017-01-24|
 |6|[聊聊Nova-compute-driver的那些趣事](http://int32bit.me/2017/01/07/聊聊Nova-compute-driver的那些趣事)|OpenStack|2017-01-07|
 |7|[深圳黑客松之旅](http://int32bit.me/2016/12/03/深圳黑客松之旅)|OpenStack|2016-12-03|
