@@ -1,10 +1,8 @@
 ---
 layout: post
-title: Ceph RBD mirror介绍以及原理分析
+title: Ceph RBD mirror功能介绍
 catalog: true
-tags:
-     - Ceph
-     - Openstack
+tags: [Ceph, OpenStack]
 ---
 
 ## 1.Ceph RBD mirror简介
@@ -157,7 +155,7 @@ rbd image 'rbd-mirror-test':
         mirroring primary: false
 ```
 
-从结果上看，我们在server-31集群上创建的image已经同步到server-32上，并且从info中可以查看mirror信息。其中`mirroring primary`属性标明是否主image，只有primary image才能写，非primary image是只读的，不能进行写操作。通过rbd命令可以把主image降级为非primary image，或者把非primary image提升为prmary image，换句话说，rbd mirror不支持AA模式，只支持主备模式。除此之外，mirror目前只支持1对1，不支持一对多模式,即不能设置多个peer。
+从结果上看，我们在server-31集群上创建的image已经同步到server-32上，并且从info中可以查看mirror信息。其中`mirroring primary`属性标明是否主image，只有primary image才能写，非primary image是只读的，不能进行写操作。通过rbd命令可以把主image降级为非primary image，或者把非primary image提升为prmary image，换句话说，rbd mirror不支持多写模式，只支持主备模式。除此之外，mirror目前只支持1对1，不支持一对多模式,即不能对一个pool或者image同时设置多个peer。
 
 可以使用`rbd mirror image status`命令查看同步状态:
 
@@ -230,11 +228,11 @@ rbd-mirror服务负责不同Ceph集群的数据同步，当用户执行IO write�
 
 需要注意的是，一旦同步出现脑裂情况，rbd-mirror将中止同步操作，此时你必须手动决定哪边的image是有用的，然后通过手动执行`rbd mirror image resync`命令恢复同步。
 
-## 4.Ceph RBD mirror在Openstack上的实践
+## 4.Ceph RBD mirror在OpenStack上的实践
 
-目前很多用户都会选择使用Ceph作为Openstack后端存储，对接Glance、Nova以及Cinder服务，甚至使用RGW对接Swift API。目前Openstack也对异地容灾支持也不太好，可选的多region方案也存在很多问题。Openstack异地容灾的关键是存储的容灾，即块设备容灾，这些包括了用户的所有虚拟机根磁盘、glance镜像以及cinder数据卷，DRBD是一种策略。如果能够把RBD mirror应用到Openstack中，或许能够解决异地容灾问题。
+目前很多用户都会选择使用Ceph作为OpenStack后端存储，对接Glance、Nova以及Cinder服务，甚至使用RGW对接Swift API。目前OpenStack也对异地容灾支持也不太好，可选的多region方案也存在很多问题。OpenStack异地容灾的关键是存储的容灾，即块设备容灾，这些包括了用户的所有虚拟机根磁盘、glance镜像以及cinder数据卷，DRBD是一种策略。如果能够把RBD mirror应用到OpenStack中，或许能够解决异地容灾问题。
 
-Openstack后端开启mirror功能，并不需要额外修改Openstack的配置，只需要部署rbd-mirror服务并对Openstack使用的pool开启mirror功能即可。
+OpenStack后端开启mirror功能，并不需要额外修改OpenStack的配置，只需要部署rbd-mirror服务并对OpenStack使用的pool开启mirror功能即可。
 
 ![openstack multisite ceph no regions](/img/posts/Ceph-RBD-mirror介绍以及原理分析/openstack-multisite-ceph-no-regions.png)
 
