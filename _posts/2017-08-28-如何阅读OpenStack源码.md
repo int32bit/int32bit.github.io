@@ -34,9 +34,67 @@ OpenStack服务越来越多、越来越复杂，覆盖的技术生态越来越�
 
 ![vim demo](/img/posts/如何阅读OpenStack源码/vim.png)
 
-由于OpenStack使用python语言开发，而python是动态类型语言，参数类型不容易从代码中看出，因此必须部署一个allinone的OpenStack开发测试环境，建议使用RDO部署：[Packstack quickstart](https://www.rdoproject.org/install/quickstart/)，当然乐于折腾使用Devstack也是没有问题的。
+OpenStack所有项目都是基于Python开发，都是标准的Python项目，通过setuptools工具管理项目，负责Python包的安装和分发。想知道一个项目有哪些服务组成，入口函数（main函数）在哪里，最直接的方式就是查看项目根目录下的`setup.cfg`文件，其中`console_scripts`就是所有服务组件的入口，比如nova的`setup.cfg`的`console_scripts`如下:
 
-要想深入研究源码，最有效的方式就是一步一步跟踪代码执行，因此会使用debug工具是关键技能之一。python的debug工具有很多，为了简便起见，pdb工具就够了。使用方法也非常简单，只要在你想设置断点的地方，嵌入以下代码：
+```
+[entry_points]
+...
+console_scripts =
+    nova-all = nova.cmd.all:main
+    nova-api = nova.cmd.api:main
+    nova-api-metadata = nova.cmd.api_metadata:main
+    nova-api-os-compute = nova.cmd.api_os_compute:main
+    nova-cells = nova.cmd.cells:main
+    nova-cert = nova.cmd.cert:main
+    nova-compute = nova.cmd.compute:main
+    nova-conductor = nova.cmd.conductor:main
+    nova-console = nova.cmd.console:main
+    nova-consoleauth = nova.cmd.consoleauth:main
+    nova-dhcpbridge = nova.cmd.dhcpbridge:main
+    nova-idmapshift = nova.cmd.idmapshift:main
+    nova-manage = nova.cmd.manage:main
+    nova-network = nova.cmd.network:main
+    nova-novncproxy = nova.cmd.novncproxy:main
+    nova-rootwrap = oslo_rootwrap.cmd:main
+    nova-rootwrap-daemon = oslo_rootwrap.cmd:daemon
+    nova-scheduler = nova.cmd.scheduler:main
+    nova-serialproxy = nova.cmd.serialproxy:main
+    nova-spicehtml5proxy = nova.cmd.spicehtml5proxy:main
+    nova-xvpvncproxy = nova.cmd.xvpvncproxy:main
+...
+```
+
+由此可知nova项目安装后会包含21个可执行程序，其中nova-compute服务的入口函数为`nova/cmd/compute.py`(. -> /)模块的`main`函数:
+
+```python
+def main():
+    config.parse_args(sys.argv)
+    logging.setup(CONF, 'nova')
+    utils.monkey_patch()
+    objects.register_all()
+
+    gmr.TextGuruMeditation.setup_autorun(version)
+
+    if not CONF.conductor.use_local:
+        block_db_access()
+        objects_base.NovaObject.indirection_api = \
+            conductor_rpcapi.ConductorAPI()
+    else:
+        LOG.warning(_LW('Conductor local mode is deprecated and will '
+                        'be removed in a subsequent release'))
+
+    server = service.Service.create(binary='nova-compute',
+                                    topic=CONF.compute_topic,
+                                    db_allowed=CONF.conductor.use_local)
+    service.serve(server)
+    service.wait()
+```
+
+其它服务依次类推。
+
+由于OpenStack使用Python语言开发，而Python是动态类型语言，参数类型不容易从代码中看出，因此必须部署一个allinone的OpenStack开发测试环境，建议使用RDO部署：[Packstack quickstart](https://www.rdoproject.org/install/quickstart/)，当然乐于折腾使用DevStack也是没有问题的。
+
+要想深入研究源码，最有效的方式就是一步一步跟踪代码执行，因此会使用debug工具是关键技能之一。Python的debug工具有很多，为了简便起见，pdb工具就够了。使用方法也非常简单，只要在你想设置断点的地方，嵌入以下代码：
 
 ```
 import pdb; pdb.set_trace()
@@ -45,11 +103,6 @@ import pdb; pdb.set_trace()
 然后在命令行（不能通过systemd执行）直接运行服务即可。假如想跟踪nova创建虚拟机的过程，首先在`nova/api/openstack/compute/servers.py`模块的`create`方法打上断点，如下：
 
 ```python
-@wsgi.response(202)
-    @extensions.expected_errors((400, 403, 409, 413))
-    @validation.schema(schema_server_create_v20, '2.0', '2.0')
-    @validation.schema(schema_server_create, '2.1', '2.18')
-    @validation.schema(schema_server_create_v219, '2.19')
     def create(self, req, body):
         """Creates a new server for a given user."""
 
@@ -71,7 +124,7 @@ import pdb; pdb.set_trace()
         ...
 ```
 
-然后注意需要通过命令行直接运行，而不是通过systemd启动:
+然后注意需要通过命令行直接运行，而不能通过systemd启动:
 
 ```
 su -c 'nova-api' nova
