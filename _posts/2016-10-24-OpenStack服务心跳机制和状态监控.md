@@ -287,4 +287,4 @@ def is_up(self, service_ref):
 
 ## 7. 总结
 
-本文从源码入手分析了OpenStack服务的心跳机制和状态监控，每个服务每隔10秒都会向数据库发送心跳包，根据downtime时间窗口内是否存在心跳判断服务的状态。其实这种方法效率是非常低的，并且当服务众多时，数据库的压力将会非常大，因此有人提出引入Zookeeper服务发现机制维护OpenStack服务状态，参考[Services Heartbeat with ZooKeeper](https://wiki.openstack.org/wiki/NovaZooKeeperHeartbeat)。
+本文从源码入手分析了OpenStack服务的心跳机制和状态监控，每个服务每隔10秒都会向数据库发送心跳包，根据downtime时间窗口内是否存在心跳判断服务的状态。其实这种方法效率是非常低的，并且当服务众多时，数据库的压力将会非常大，因此有人提出引入Zookeeper服务发现机制维护OpenStack服务状态，参考[Services Heartbeat with ZooKeeper](https://wiki.openstack.org/wiki/NovaZooKeeperHeartbeat)。目前其实可以使用OpenStack Tooz项目的member管理实现服务心跳，OpenStack Mistral服务就是使用了该方案，该方案支持不同的coordinator实现服务实例心跳，比如memcached、Zookeeper等。
