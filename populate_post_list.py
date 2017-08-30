@@ -1,22 +1,37 @@
 #!/usr/bin/env python3
 #code=utf-8
-
 import os
 from glob import glob
 
 BLOG_URL = 'http://int32bit.me'
 
 
-def get_post_files(post_dir="./_posts"):
+def get_posts(post_dir="./_posts"):
     posts = []
     for f in glob(post_dir + "/*.md"):
-        posts.append(os.path.basename(f))
-    return posts
+        posts.append(extract_post_metadata(f))
+    return sorted(posts, key=lambda s: s[1], reverse=True)
 
 
-def get_posts(files):
-    posts = list(map(lambda s: (s[:10], s[11:-3]), files))
-    return sorted(posts, key=lambda s: s[0], reverse=True)
+def extract_post_metadata(path):
+    # demo 2017-08-28-如何阅读OpenStack源码.md
+    title = os.path.basename(path)[11:-3]
+    date = os.path.basename(path)[:10]
+    tags = []
+    with open(path, 'r') as f:
+        started = False
+        for line in f:
+            if line.strip() == '---':
+                if started:
+                    break
+                else:
+                    started = True
+            if line.strip().startswith('tags'):
+                # line = 'tags: [Linux, OpenStack]\n'
+                t = line.split(':')[1].strip()[1:-1].split(',')
+                tags = [i.strip() for i in t]
+                break
+    return title, date, tags
 
 
 def generate_post_url(date, title):
@@ -35,11 +50,12 @@ def print_as_markdown_table(posts):
     count = 0
     for post in posts:
         count = count + 1
-        date = post[0]
-        title = post[1]
+        title = post[0]
+        date = post[1]
+        tags = post[2]
         post_url = generate_post_url(date, title)
         target = "[%(title)s](%(url)s)" % {"title": title, "url": post_url}
-        print(_convert_to_md_row([str(count), target, 'OpenStack', date]))
+        print(_convert_to_md_row([str(count), target, ', '.join(tags), date]))
 
 
 def _convert_to_md_row(fields):
@@ -47,8 +63,7 @@ def _convert_to_md_row(fields):
 
 
 def main():
-    files = get_post_files()
-    posts = get_posts(files)
+    posts = get_posts(post_dir="./_posts")
     print_as_markdown_table(posts)
 
 
