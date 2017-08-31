@@ -27,13 +27,14 @@ Thanks Jekyll and Github Page!
 |13|[Harbor命令行工具介绍](http://int32bit.me/2016/09/09/Harbor命令行工具介绍)|Docker|2016-09-09|
 |14|[OpenStack使用ISO镜像启动云主机](http://int32bit.me/2016/08/01/OpenStack使用ISO镜像启动云主机)|OpenStack|2016-08-01|
 |15|[Sparse文件处理和传输](http://int32bit.me/2016/06/01/Sparse文件处理和传输)|Linux|2016-06-01|
-|16|[Ceph-Pool操作总结](http://int32bit.me/2016/05/19/Ceph-Pool操作总结)|Ceph|2016-05-19|
-|17|[Docker实现跨主机通信](http://int32bit.me/2016/05/10/Docker实现跨主机通信)|Docker|2016-05-10|
-|18|[Linux常用网络工具总结](http://int32bit.me/2016/05/04/Linux常用网络工具总结)|Linux|2016-05-04|
-|19|[使用Harbor构建私有镜像仓库](http://int32bit.me/2016/04/18/使用Harbor构建私有镜像仓库)|Docker|2016-04-18|
-|20|[谈谈Docker数据容器](http://int32bit.me/2016/04/14/谈谈Docker数据容器)|Docker|2016-04-14|
-|21|[虚拟机、Docker和Hyper技术比较](http://int32bit.me/2016/03/20/虚拟机、Docker和Hyper技术比较)|Docker|2016-03-20|
-|22|[使用bash关联数组统计单词频数](http://int32bit.me/2015/03/18/使用bash关联数组统计单词频数)|Linux, bash|2015-03-18|
-|23|[bash字符串前美元符号的作用](http://int32bit.me/2014/11/30/bash字符串前美元符号的作用)|Linux, bash|2014-11-30|
-|24|[随机算法和洗牌算法](http://int32bit.me/2014/10/24/随机算法和洗牌算法)|algorithm|2014-10-24|
-|25|[小米2013校招笔试算法题-朋友圈](http://int32bit.me/2013/10/27/小米2013校招笔试算法题-朋友圈)|algorithm|2013-10-27|
+|16|[如何构建OpenStack镜像](http://int32bit.me/2016/05/28/如何构建OpenStack镜像)|OpenStack|2016-05-28|
+|17|[Ceph-Pool操作总结](http://int32bit.me/2016/05/19/Ceph-Pool操作总结)|Ceph|2016-05-19|
+|18|[Docker实现跨主机通信](http://int32bit.me/2016/05/10/Docker实现跨主机通信)|Docker|2016-05-10|
+|19|[Linux常用网络工具总结](http://int32bit.me/2016/05/04/Linux常用网络工具总结)|Linux|2016-05-04|
+|20|[使用Harbor构建私有镜像仓库](http://int32bit.me/2016/04/18/使用Harbor构建私有镜像仓库)|Docker|2016-04-18|
+|21|[谈谈Docker数据容器](http://int32bit.me/2016/04/14/谈谈Docker数据容器)|Docker|2016-04-14|
+|22|[虚拟机、Docker和Hyper技术比较](http://int32bit.me/2016/03/20/虚拟机、Docker和Hyper技术比较)|Docker|2016-03-20|
+|23|[使用bash关联数组统计单词频数](http://int32bit.me/2015/03/18/使用bash关联数组统计单词频数)|Linux, bash|2015-03-18|
+|24|[bash字符串前美元符号的作用](http://int32bit.me/2014/11/30/bash字符串前美元符号的作用)|Linux, bash|2014-11-30|
+|25|[随机算法和洗牌算法](http://int32bit.me/2014/10/24/随机算法和洗牌算法)|algorithm|2014-10-24|
+|26|[小米2013校招笔试算法题-朋友圈](http://int32bit.me/2013/10/27/小米2013校招笔试算法题-朋友圈)|algorithm|2013-10-27|
