@@ -103,25 +103,25 @@ import pdb; pdb.set_trace()
 然后在命令行（不能通过systemd执行）直接运行服务即可。假如想跟踪nova创建虚拟机的过程，首先在`nova/api/openstack/compute/servers.py`模块的`create`方法打上断点，如下：
 
 ```python
-    def create(self, req, body):
-        """Creates a new server for a given user."""
+def create(self, req, body):
+    """Creates a new server for a given user."""
 
-        import pdb; pdb.set_trace() # 设置断点
-        context = req.environ['nova.context']
-        server_dict = body['server']
-        password = self._get_server_admin_password(server_dict)
-        name = common.normalize_name(server_dict['name'])
+    import pdb; pdb.set_trace() # 设置断点
+    context = req.environ['nova.context']
+    server_dict = body['server']
+    password = self._get_server_admin_password(server_dict)
+    name = common.normalize_name(server_dict['name'])
 
-        if api_version_request.is_supported(req, min_version='2.19'):
-            if 'description' in server_dict:
-                # This is allowed to be None
-                description = server_dict['description']
-            else:
-                # No default description
-                description = None
+    if api_version_request.is_supported(req, min_version='2.19'):
+        if 'description' in server_dict:
+            # This is allowed to be None
+            description = server_dict['description']
         else:
-            description = name
-        ...
+            # No default description
+            description = None
+    else:
+        description = name
+    ...
 ```
 
 然后注意需要通过命令行直接运行，而不能通过systemd启动:
@@ -240,7 +240,6 @@ def schedule_and_build_instances(self, context, build_requests,
         context, build_requests, request_spec, image,
         admin_password, injected_files, requested_networks,
         block_device_mapping)
-
 ```
 
 该方法即时conductor RPC调用api，即`nova/conductor/rpcapi.py`模块，该方法除了一堆的版本检查，剩下的就是对RPC调用的封装，代码只有两行:
