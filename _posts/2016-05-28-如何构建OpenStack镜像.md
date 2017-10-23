@@ -15,15 +15,15 @@ tags: [OpenStack]
 
 镜像的宿主机操作系统为`Ubuntu 14.04`，开启了`VT`功能(使用`kvm-ok`命令验证)并安装了`libvirt`系列工具，包括`virsh`、`virt-manager`、`libguestfs-tools`等。
 
-## 1 手动制作OpenStackjingx
+## 1 手动制作OpenStack镜像
 
 ### 1.1 下载镜像
 
-访问官方[镜像地址](https://www.centos.org/download/mirrors/)下载，注意选择中国的镜像源，相对国外镜像下载速度比较快，进入后选择版本为`7.2.1511`，在`isos`目录下下载`x86_64`的`Minimal`镜像，如果网速不给力，最好不要选择下载`Netinstall`镜像，因为这会在安装时联网下载大量的软件包，重新安装时需要重新下载这些软件包，非常浪费时间。
+访问官方[镜像地址](https://www.centos.org/download/mirrors/)下载，注意选择中国的镜像源，相对国外镜像下载速度更快，进入后选择版本为`7.2.1511`，在`isos`目录下下载`x86_64`的`Minimal`镜像，如果网速不给力，最好不要选择下载`Netinstall`镜像，因为这会在安装时联网下载大量的软件包，重新安装时需要重新下载这些软件包。
 
 ### 1.2 创建虚拟机
 
-首先创建一个qcow2格式镜像文件，用于虚拟机的磁盘，大小10G就够了。
+首先创建一个qcow2格式镜像文件，用于虚拟机的根磁盘，大小10G就够了。
 
 ```bash
 qemu-img create -f qcow2 centos.qcow2 10G # create disk image
@@ -43,15 +43,15 @@ sudo virt-install --virt-type kvm --name $NAME --ram 1024 \
   --cdrom=$CDROM
 ```
 
-启动完成后，使用vnc client连接，你也可以使用`virt-manager`或者`virt-viewer`连接。
+启动完成后，使用vnc client连接或者使用`virt-manager`、`virt-viewer`连接。
 
 ### 1.3 安装OS
 
 进入虚拟机控制台可以看到CentOS的启动菜单，选择`Install Centos 7`，继续选择语言后将进入`INSTALLION SUMMARY`，其中大多数配置默认即可，`SOFTWARE SELECTION`选择`Minimal Install`，`INSTALLATION DESTINATION`需要选择手动配置分区，我们只需要一个根分区即可，不需要`swap`分区，文件系统选择`ext4`或者`xfs`，存储驱动选择`Virtio Block Device`，如图：
 
-![分区表设置](/img/posts/手动制作Openstack镜像/filesystem.png)
+![分区表设置](/img/posts/如何构建OpenStack镜像/filesystem.png)
 
-配置完成后就可以开始安装了，在`CONFIGURATION`中设置root临时密码，需要记住这个临时密码，制作完后`cloud-init`会重新设置root初始密码。
+配置完成后就可以开始安装了，在`CONFIGURATION`中设置root临时密码，只需要暂时记住这个临时密码，制作完后`cloud-init`会重新设置root初始密码。
 
 大约几分钟后，即可自动完成安装配置工作，最后点击右下角的reboot重启退出虚拟机。
 
@@ -72,26 +72,32 @@ sudo systemctl restart sshd
 注意：
 
 * 不建议开启密码登录功能，使用密钥登录更安全。
-* 尽量禁止root用户远程登录。
+* 不建议开启root远程登录。
 
-为了加快安装速度，可以配置为本地软件源仓库，若没有本地镜像仓库，则选择国内的软件源，会相对官网的速度下载要快，提高执行效率。
+为了加快安装速度，可以配置为本地软件源仓库，若没有本地镜像仓库，则选择国内的软件源，相对官网的速度下载要快。
 
 ```bash
 mv my_repo.repo /etc/yum.repos.d/
 ```
 
-[acpid](https://wiki.archlinux.org/index.php/acpid)是一个用户空间的服务进程, 可以用来处理电源相关事件,比如将kernel中的电源事件转发给应用程序，告诉应用程序安全的退出，防止应用程序异常退出导致数据损坏。libvirt可以通过向guest虚拟机发送acpid事件触发电源操作，使虚拟机安全自动地触发关机、重启等操作，相对于强制执行电源操作，通过acpid事件发送开关机信号通常称为软重启或者软关机。为了支持软操作，必须安装`acpid`服务，并设置开机自启动：
+#### acpid
+
+[acpid](https://wiki.archlinux.org/index.php/acpid)是一个用户空间的服务进程, 用来处理电源相关事件,比如将kernel中的电源事件转发给应用程序，告诉应用程序安全的退出，防止应用程序异常退出导致数据损坏。libvirt可以通过向guest虚拟机发送acpid事件触发电源操作，使虚拟机安全关机、重启等操作，相对于强制执行关闭电源操作更安全。通过acpid事件发送开关机信号即我们经常所说的软重启或者软关机。
+
+为了支持软操作，虚拟机需要安装`acpid`服务，并设置开机自启动：
 
 ```bash
 yum install -y acpid
 systemctl enable acpid
 ```
 
-**注意:**
+**提示:**
 
-* 用户执行重启或者关机操作时，OpenStack会首先尝试调用libvirt的shutdown方法，即软关机。
-* 当软关机执行失败或者超时(默认120秒)，则会调动libvirt的destroy方法，即强制关机，因此如果虚拟机关机或者重启很慢，很可能就是acpid没有正常运行。
-* 为了使虚拟机进程安全退出，减少数据损坏风险，尽量使用软操作，硬操作就好比强制切断电源。
+* 用户执行重启或者关机操作时，OpenStack会首先尝试调用libvirt的`shutdown`方法，即软关机。
+* 当软关机执行失败或者超时(默认120秒)，则会调动libvirt的`destroy`方法，即强制关机，因此如果虚拟机关机或者重启很慢，很可能是acpid没有正常运行。
+* 为了使虚拟机进程安全退出，减少数据损坏风险，尽量使用软操作，硬操作可能导致程序崩溃或者数据丢失。
+
+#### console log
 
 当操作系统内核崩溃时会报出内核系统crash出错信息，通常启动的时候一闪而过, 而此时系统还没有起来，不能通过远程工具(比如ssh)进入系统查看，我们可以通过配置grub，把这些日志重定向到Serial Console中，这样我们就可以通过Serial console来访问错误信息，以供分析和排错使用。
 
@@ -106,9 +112,14 @@ GRUB_CMDLINE_LINUX="crashkernel=auto console=tty0 console=ttyS0,115200n8"
 <serial type='file'>
       <source path='/var/lib/nova/instances/99579ce1-f4c4-4031-a56c-68e85a3d037a/console.log'/>
       <target port='0'/>
-    </serial>
+</serial>
 ```
-这样内核产生的日志发到ttyS0，实际上写到`console.log`文件中。OpenStack通过`nova console-log`命令可以获取该文件内容，查看错误日志。
+
+这样内核产生的日志发到ttyS0，实际上写到`console.log`文件中。
+
+OpenStack通过`nova console-log`命令可以获取该文件内容，查看错误日志。
+
+#### qemu-guest-agent
 
 qemu-guest-agent是运行在虚拟机内部的一个服务，libvirt会在本地创建一个unix socket，模拟为虚拟机内部的一个串口设备，从而实现了宿主机与虚拟机通信，这种方式不依赖于TCP/IP网络，实现方式简单方便。
 
@@ -117,7 +128,7 @@ qemu-guest-agent是运行在虚拟机内部的一个服务，libvirt会在本地
       <source mode='bind' path='/var/lib/libvirt/qemu/org.qemu.guest_agent.0.instance-00003c2c.sock'/>
       <target type='virtio' name='org.qemu.guest_agent.0'/>
       <address type='virtio-serial' controller='0' bus='0' port='1'/>
-    </channel>
+</channel>
 ```
 
 如上宿主机的socket文件为`org.qemu.guest_agent.0.instance-00003c2c.sock`，在虚拟机内部为`/dev/virtio-ports/org.qemu.guest_agent.0`。
@@ -176,15 +187,19 @@ $ virsh qemu-agent-command instance-000028d5 '{"execute":"guest-info"}' | python
  guest-sync-delimited
 ```
 
-确认包含`guest-set-user-password`指令，支持修改用户密码。
+确认包含`guest-set-user-password`指令，支持修改管理员密码。
+
+#### zeroconf
 
 zeroconf是一种古老的自动网络配置技术，在没有DHCP服务的年代，所有服务器都需要网管手动配置IP、hostname等，非常麻烦，zeroconf正好解决了这个问题，不过目前通常都通过DHCP获取地址了。不过一些操作系统仍然会开启这个服务，当DHCP获取IP失败时，会尝试通过zeroconf配置。
 
-zeroconf启动时会自动创建一条路由`169.254.0.0/16`，而虚拟机访问metadata服务的地址正好是`169.254.169.254`，如果启动了zeroconf服务，虚拟机不能通过169.254.169.254路由到网络节点的metadata服务了。并且OpenStack虚拟机都是通过DHCP获取该IP的，因此不需要该服务。为了虚拟机能够访问metadata服务，我们必须禁止zeroconf服务，关于该问题的更详细讨论可参考[bug#983611](https://bugzilla.redhat.com/show_bug.cgi?id=983611)：
+zeroconf启动时会自动创建一条路由`169.254.0.0/16`，而虚拟机访问metadata服务的地址正好是`169.254.169.254`，如果启动了zeroconf服务，由于路由冲突，虚拟机不能通过169.254.169.254路由到网络节点的metadata服务了。OpenStack虚拟机通常都是通过DHCP获取IP的，因此我们并不需要zeroconf服务。为了虚拟机能够访问metadata服务，我们必须禁止zeroconf服务，关于该问题的更详细讨论可参考[bug#983611](https://bugzilla.redhat.com/show_bug.cgi?id=983611)：
 
 ```bash
 echo "NOZEROCONF=yes" >> /etc/sysconfig/network
 ```
+
+#### cloud-init
 
 接下来安装cloud-init，cloud-init是虚拟机第一次启动时执行的脚本，主要负责从metadata服务中拉取配置信息，完成虚拟机的初始化工作，比如设置主机名、初始化密码以及注入密钥等。
 
@@ -192,6 +207,8 @@ echo "NOZEROCONF=yes" >> /etc/sysconfig/network
 # yum install -y cloud-init-0.7.6-bzr1.el7.centos.noarch.rpm
 yum install -y cloud-init
 ```
+
+#### growpart
 
 虚拟机制作镜像时指定了根分区大小（比如我们设置为10GB），为了使虚拟机能够自动调整为flavor disk指定的根磁盘大小，即自动扩容, 我们需要安装glowpart(老版本叫growroot)并完成以下配置：
 
@@ -216,7 +233,7 @@ rpm -qa kernel | sed 's/^kernel-//'  | xargs -I {} dracut -f /boot/initramfs-{}.
 virt-sysprep -d centos # cleanup tasks such as removing the MAC address references
 ```
 
-删除虚拟机，镜像制作完成，可以上传到glance了。
+删除虚拟机，镜像制作完成。
 
 ```bash
 virsh undefine centos # 删除虚拟机
@@ -234,8 +251,8 @@ glance image-create --file ./centos.qcow2 --disk-format qcow2 --container-format
 
 ### 2.2 通过rbd直接导入镜像
 
-由于镜像通常比较大，上传时通过glance API通过HTTP上传非常耗时。如果Glance使用Ceph作为存储后端，可以通过rbd直接导入(import)方式上传到Ceph中，速度会大幅度提高。
-
+由于镜像通常比较大，上传时如果使用glance API,则通过HTTP上传，由于HTTP协议的限制，导致上传非常慢，非常耗时。
+如果Glance使用Ceph作为存储后端，可以通过rbd直接导入(import)方式上传到Ceph中，速度会大幅度提高。
 
 首先需要把镜像转为raw格式：
 
@@ -293,14 +310,15 @@ def _set_qemu_guest_agent(self, guest, flavor, instance, image_meta):
     ...
 ```
 
-由此可知，我们必须添加镜像property`hw_qemu_guest_agent=yes`,否则libvert启动虚拟机时不会创建qemu-guest-agent设备，虚拟机的qemu-guest-agent由于找不到对应的串行设备而启动失败。
+由此可知，我们必须添加镜像property`hw_qemu_guest_agent=yes`,否则libvert启动虚拟机时不会创建qemu-guest-agent设备，虚拟机的qemu-guest-agent由于找不到对应的串行设备而导致修改密码失败。
 
 ```bash
 glance image-update --property hw_qemu_guest_agent=yes $IMAGE_ID
 ```
+
 ## 3 DIB工具介绍
 
-前面介绍了手动制作镜像的过程，从镜像下载到启动虚拟机安装操作系统，然后在虚拟机中完成配置，最后清除本地信息，整个过程非常繁杂、耗时，并且一旦制作镜像的镜像有点问题，就需要启动虚拟机重新再来一遍，重复工作多，效率低。
+前面介绍了手动制作镜像的过程，从镜像下载到启动虚拟机安装操作系统，然后在虚拟机中完成配置，最后清除本地信息，整个过程非常繁杂、耗时，并且一旦制作镜像的镜像有点问题，就需要启动虚拟机重新再来一遍，重复工作多，效率非常低。
 
 假设制作镜像时某个配置项错了，能不能不通过启动虚拟机进入系统去更改呢？答案是肯定的！我们只需要把制作好的镜像通过loop设备挂载到本地（如果是qcow2格式，则需要通过nbd挂载），然后chroot到挂载目录中修改配置文件即可，相对于启动虚拟机进入系统去更改方便高效很多。
 
@@ -311,7 +329,7 @@ OpenStack社区正是基于该思路，开发了[DIB(disk image builder)](https:
 >diskimage-builder is a flexible suite of components for building a wide-range of disk images, filesystem images and ramdisk images for use with OpenStack.
 >
 
-DIB把一些操作封装成脚本，比如创建用户(devuser)、安装cloud-init(cloud-init)、配置yum源(yum)、部署tgtadm(deploy-tgtadm)等，这些脚本称为elements，位于目录`diskimage-builder/diskimage_builder/elements`，你可以根据自己的需求自己写elements，elements之间会有依赖，依赖通过`element-deps`文件指定，比如elements centos7的element-deps为：
+DIB把一些操作封装成脚本，比如创建用户(devuser)、安装cloud-init(cloud-init)、配置yum源(yum)、部署tgtadm(deploy-tgtadm)等，这些脚本称为elements，位于目录`diskimage-builder/diskimage_builder/elements`，你可以根据自己的需求自己定制elements，elements之间会有依赖，依赖通过`element-deps`文件指定，比如elements centos7的element-deps为：
 
 ```
 cache-url
@@ -326,7 +344,8 @@ DIB会首先下载一个base镜像，然后通过用户指定的elements，一�
 比如制作ubuntu 14.04镜像：
 
 ```bash
-DIB_RELEASE=trusty disk-image-create -o ubuntu-trusty.qcow2 vm ubuntu
+export DIB_RELEASE=trusty
+disk-image-create -o ubuntu-trusty.qcow2 vm ubuntu
 ```
 
 创建Trove percona镜像:
@@ -334,6 +353,7 @@ DIB_RELEASE=trusty disk-image-create -o ubuntu-trusty.qcow2 vm ubuntu
 ```bash
 disk-image-create -a amd64 -o ubuntu-trusty-percona-5.6.33-guest-image -x ubuntu vm cloud-init-datasources ubuntu-trusty-guest ubuntu-trusty-percona
 ```
+
 其中`ubuntu-trustry-guest`会安装trove-guest-agent，`ubuntu-trusty-percona`会安装percona组件。
 
 制作镜像时可以通过环境变量进行配置，比如创建ironic镜像:
@@ -359,7 +379,7 @@ DIB_CLOUD_INIT_DATASOURCES="ConfigDrive, OpenStack" disk-image-create -o centos7
 
 使用刚刚创建的镜像启动一台云主机，如果使用nova CLI工具，需要传`--admin-pass`参数指定root密码，并指定disk大小为20G的`flavor`。如果使用OpenStack Dashborad创建，需要简单配置下dashborad使其支持配置云主机密码，如图：
 
-![设置密码面板](/img/posts/手动制作Openstack镜像/set_password.png)
+![设置密码面板](/img/posts/如何构建OpenStack镜像/set_password.png)
  
 创建成功后进入vnc界面，使用root账号以及设置的新密码，如果登录成功，说明注入密码成功。
 
@@ -376,7 +396,7 @@ df -h
 
 如图：
 
-![查看磁盘信息](/img/posts/手动制作Openstack镜像/disk.png)
+![查看磁盘信息](/img/posts/如何构建OpenStack镜像/disk.png)
 
 镜像原始根分区大小为10GB，如果`lsblk`显示`vda`大小为`20GB`，说明操作系统识别出根磁盘大小。如果df显示`/dev/sda1`size为20GB，说明根磁盘的分区和文件系统均自动完成了扩容操作，growpart运行正常。
 
