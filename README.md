@@ -12,7 +12,7 @@ Thanks Jekyll and Github Page!
 
 |序号|文章标题|文章类别|发布日期|
 |----|----|----|----|
-|1|[OpenStack高级特性介绍](http://int32bit.me/2018/03/17/OpenStack高级特性介绍)||2018-03-17|
+|1|[OpenStack高级特性简介](http://int32bit.me/2018/05/17/OpenStack高级特性简介)|OpenStack|2018-05-17|
 |2|[如何搭建github博客](http://int32bit.me/2017/12/23/如何搭建github博客)|Linux|2017-12-23|
 |3|[OpenStack使用Ceph存储，Ceph到底做了什么](http://int32bit.me/2017/11/23/OpenStack使用Ceph存储，Ceph到底做了什么)|OpenStack, Ceph|2017-11-23|
 |4|[Docker使用OpenStack Cinder持久化volume原理分析及实践](http://int32bit.me/2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践)||2017-10-04|
