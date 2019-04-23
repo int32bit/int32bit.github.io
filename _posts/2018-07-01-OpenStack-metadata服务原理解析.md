@@ -215,6 +215,45 @@ qdhcp-2c4b658c-f2a0-4a17-9ad2-c07e45e13a8a
 
 关于第二个问题，显然还需要一层转发，具体内容请看下一小节内容。
 
+另外需要注意的是，新版本的OpenStack是直接使用haproxy代理转发的，在一些老版本中则使用`neutron-ns-metadata-proxy`进程负责转发，实现的代码位于`neutron/agent/metadata/namespace_proxy.py`：
+
+```python
+def _proxy_request(self, remote_address, method, path_info,
+                       query_string, body):
+    headers = {
+        'X-Forwarded-For': remote_address,
+    }
+
+    if self.router_id:
+        headers['X-Neutron-Router-ID'] = self.router_id
+    else:
+        headers['X-Neutron-Network-ID'] = self.network_id
+
+    url = urlparse.urlunsplit((
+        'http',
+        '169.254.169.254',
+        path_info,
+        query_string,
+        ''))
+
+    h = httplib2.Http()
+    resp, content = h.request(
+        url,
+        method=method,
+        headers=headers,
+        body=body,
+        connection_type=agent_utils.UnixDomainHTTPConnection)
+```
+
+大家可能对请求URL为169.254.169.254有疑问，怎么转发给自己呢? 这是因为这是一个UNIX Domain Socket请求，其实这个URL只是个参数占位，填什么都无所谓，这个请求相当于:
+
+```sh
+curl -H "X-Neutron-Network-ID: ${network_uuid}" \
+     -H "X-Forwarded-For: ${request_ip}" \
+     -X GET \
+     --unix /var/lib/neutron/metadata_proxy \
+     http://169.254.169.254
+```
 
 ### 3.4 Metadata请求第三次转发
 
