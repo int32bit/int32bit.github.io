@@ -1,6 +1,7 @@
 ---
 layout: post
-title: OpenStack Ironic参考部署
+title: OpenStack Ironic安装部署参考
+catalog: true
 tags: [OpenStack]
 ---
 
