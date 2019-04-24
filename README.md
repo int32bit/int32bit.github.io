@@ -47,5 +47,5 @@ Thanks Jekyll and Github Page!
 |33|[虚拟机、Docker和Hyper技术比较](http://int32bit.me/2016/03/20/虚拟机、Docker和Hyper技术比较)|Docker|2016-03-20|
 |34|[使用bash关联数组统计单词频数](http://int32bit.me/2015/03/18/使用bash关联数组统计单词频数)|Linux, bash|2015-03-18|
 |35|[bash字符串前美元符号的作用](http://int32bit.me/2014/11/30/bash字符串前美元符号的作用)|Linux, bash|2014-11-30|
-|36|[随机算法和洗牌算法](http://int32bit.me/2014/10/24/随机算法和洗牌算法)|algorithm|2014-10-24|
-|37|[小米2013校招笔试算法题-朋友圈](http://int32bit.me/2013/10/27/小米2013校招笔试算法题-朋友圈)|algorithm|2013-10-27|
+|36|[随机算法和洗牌算法](http://int32bit.me/2014/10/24/随机算法和洗牌算法)|Algorithm|2014-10-24|
+|37|[小米2013校招笔试算法题-朋友圈](http://int32bit.me/2013/10/27/小米2013校招笔试算法题-朋友圈)|Algorithm|2013-10-27|
