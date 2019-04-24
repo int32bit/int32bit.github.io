@@ -15,12 +15,12 @@ Thanks Jekyll and Github Page!
 |1|[OpenStack-Ironic安装部署参考](http://int32bit.me/2019/04/23/OpenStack-Ironic安装部署参考)|OpenStack|2019-04-23|
 |2|[OpenStack安全加固探索与实践](http://int32bit.me/2019/04/19/OpenStack安全加固探索与实践)||2019-04-19|
 |3|[基于Ironic实现X86裸机自动化装机实践与优化](http://int32bit.me/2019/03/18/基于Ironic实现X86裸机自动化装机实践与优化)||2019-03-18|
-|4|[OpenStack-metadata服务原理解析](http://int32bit.me/2018/07/01/OpenStack-metadata服务原理解析)||2018-07-01|
+|4|[OpenStack-metadata服务原理解析](http://int32bit.me/2018/07/01/OpenStack-metadata服务原理解析)|OpenStack|2018-07-01|
 |5|[OpenStack资源管理层次模型](http://int32bit.me/2018/05/21/OpenStack资源管理层次模型)|OpenStack|2018-05-21|
 |6|[OpenStack高级特性简介](http://int32bit.me/2018/05/17/OpenStack高级特性简介)|OpenStack|2018-05-17|
 |7|[OpenStack使用Ceph存储，Ceph到底做了什么](http://int32bit.me/2017/11/23/OpenStack使用Ceph存储，Ceph到底做了什么)|OpenStack, Ceph|2017-11-23|
-|8|[Docker使用OpenStack Cinder持久化volume原理分析及实践](http://int32bit.me/2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践)||2017-10-04|
-|9|[OpenStack中那些少见但很有用的操作](http://int32bit.me/2017/09/25/OpenStack中那些少见但很有用的操作)||2017-09-25|
+|8|[Docker使用OpenStack Cinder持久化volume原理分析及实践](http://int32bit.me/2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践)|OpenStack, Docker|2017-10-04|
+|9|[OpenStack中那些少见但很有用的操作](http://int32bit.me/2017/09/25/OpenStack中那些少见但很有用的操作)|OpenStack|2017-09-25|
 |10|[OpenStack虚拟机挂载数据卷过程分析](http://int32bit.me/2017/09/08/OpenStack虚拟机挂载数据卷过程分析)|OpenStack|2017-09-08|
 |11|[OpenStack工作流服务Mistral项目简介](http://int32bit.me/2017/09/03/OpenStack工作流服务Mistral项目简介)|OpenStack|2017-09-03|
 |12|[如何阅读OpenStack源码](http://int32bit.me/2017/08/28/如何阅读OpenStack源码)|OpenStack|2017-08-28|

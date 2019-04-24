@@ -2,7 +2,7 @@
 layout:  post
 title: OpenStack虚拟机如何获取metadata
 catalog: true
-tag: [OpenStack]
+tags: [OpenStack]
 ---
 
 ## 1. 关于OpenStack metadata服务

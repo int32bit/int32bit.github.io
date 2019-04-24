@@ -2,7 +2,7 @@
 layout: post
 title: Docker使用OpenStack Cinder持久化volume原理分析及实践
 catalog: true
-tag: [OpenStack, Docker]
+tags: [OpenStack, Docker]
 ---
 
 ## 1 背景知识
