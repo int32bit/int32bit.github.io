@@ -16,7 +16,7 @@ header-img: "img/posts/OpenStack断点调试方法/bg.jpg"
 
 ## 2 Python调试工具介绍
 
-Python主要使用pdb工具进行调试，用法也很简单，只要在需要打断点的位置嵌入`pdb.trace()`代码即可。
+Python主要使用pdb工具进行调试，用法也很简单，只要在需要打断点的位置嵌入`pdb.set_trace()`代码即可。
 
 比如如下Python代码：
 
