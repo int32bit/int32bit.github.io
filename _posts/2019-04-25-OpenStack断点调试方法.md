@@ -2,6 +2,7 @@
 layout: post
 title: OpenStack断点调试方法
 catalog: true
+tag: [OpenStack, Python]
 header-img: "img/posts/OpenStack断点调试方法/bg.jpg"
 ---
 

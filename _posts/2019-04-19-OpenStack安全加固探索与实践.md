@@ -2,6 +2,7 @@
 layout: post
 title: OpenStack安全加固探索与实践
 catalog: true
+tag: [OpenStack]
 header-img: "img/posts/OpenStack安全加固探索与实践/bg.jpg"
 ---
 
