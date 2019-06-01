@@ -12,42 +12,43 @@ Thanks Jekyll and Github Page!
 
 |序号|文章标题|文章类别|发布日期|
 |----|----|----|----|
-|1|[如何阅读OpenStack源码(更新版)](http://int32bit.me/2019/04/29/如何阅读OpenStack源码(更新版))|OpenStack|2019-04-29|
-|2|[OpenStack断点调试方法](http://int32bit.me/2019/04/25/OpenStack断点调试方法)||2019-04-25|
-|3|[OpenStack-Ironic安装部署参考](http://int32bit.me/2019/04/23/OpenStack-Ironic安装部署参考)|OpenStack|2019-04-23|
-|4|[OpenStack安全加固探索与实践](http://int32bit.me/2019/04/19/OpenStack安全加固探索与实践)||2019-04-19|
-|5|[基于Ironic实现X86裸机自动化装机实践与优化](http://int32bit.me/2019/03/18/基于Ironic实现X86裸机自动化装机实践与优化)||2019-03-18|
-|6|[OpenStack-metadata服务原理解析](http://int32bit.me/2018/07/01/OpenStack-metadata服务原理解析)|OpenStack|2018-07-01|
-|7|[OpenStack资源管理层次模型](http://int32bit.me/2018/05/21/OpenStack资源管理层次模型)|OpenStack|2018-05-21|
-|8|[OpenStack高级特性简介](http://int32bit.me/2018/05/17/OpenStack高级特性简介)|OpenStack|2018-05-17|
-|9|[OpenStack使用Ceph存储，Ceph到底做了什么](http://int32bit.me/2017/11/23/OpenStack使用Ceph存储，Ceph到底做了什么)|OpenStack, Ceph|2017-11-23|
-|10|[Docker使用OpenStack Cinder持久化volume原理分析及实践](http://int32bit.me/2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践)|OpenStack, Docker|2017-10-04|
-|11|[OpenStack中那些少见但很有用的操作](http://int32bit.me/2017/09/25/OpenStack中那些少见但很有用的操作)|OpenStack|2017-09-25|
-|12|[OpenStack虚拟机挂载数据卷过程分析](http://int32bit.me/2017/09/08/OpenStack虚拟机挂载数据卷过程分析)|OpenStack|2017-09-08|
-|13|[OpenStack工作流服务Mistral项目简介](http://int32bit.me/2017/09/03/OpenStack工作流服务Mistral项目简介)|OpenStack|2017-09-03|
-|14|[如何阅读OpenStack源码](http://int32bit.me/2017/08/28/如何阅读OpenStack源码)|OpenStack|2017-08-28|
-|15|[OpenStack数据库版本控制工具简介](http://int32bit.me/2017/08/24/OpenStack数据库版本控制工具简介)|OpenStack, Python|2017-08-24|
-|16|[Cinder数据卷备份原理和实践](http://int32bit.me/2017/03/30/Cinder数据卷备份原理和实践)|OpenStack|2017-03-30|
-|17|[cinder-volume服务如何实现AA高可用](http://int32bit.me/2017/03/16/cinder-volume服务如何实现AA高可用)|OpenStack|2017-03-16|
-|18|[Ceph-RBD-mirror功能介绍](http://int32bit.me/2017/01/24/Ceph-RBD-mirror功能介绍)|Ceph, OpenStack|2017-01-24|
-|19|[聊聊Nova-compute-driver的那些趣事](http://int32bit.me/2017/01/07/聊聊Nova-compute-driver的那些趣事)|OpenStack|2017-01-07|
-|20|[深圳黑客松之旅](http://int32bit.me/2016/12/03/深圳黑客松之旅)|OpenStack|2016-12-03|
-|21|[OpenStack虚拟机保护的几种方法](http://int32bit.me/2016/11/09/OpenStack虚拟机保护的几种方法)|OpenStack|2016-11-09|
-|22|[OpenStack对象模型以及数据库访问机制](http://int32bit.me/2016/11/01/OpenStack对象模型以及数据库访问机制)|OpenStack|2016-11-01|
-|23|[OpenStack使用Ceph存储后端创建虚拟机快照原理剖析](http://int32bit.me/2016/10/25/OpenStack使用Ceph存储后端创建虚拟机快照原理剖析)|Ceph, OpenStack|2016-10-25|
-|24|[OpenStack服务心跳机制和状态监控](http://int32bit.me/2016/10/24/OpenStack服务心跳机制和状态监控)|OpenStack|2016-10-24|
-|25|[配置高效科学的Linux开发环境](http://int32bit.me/2016/10/03/配置高效科学的Linux开发环境)|Linux|2016-10-03|
-|26|[Harbor命令行工具介绍](http://int32bit.me/2016/09/09/Harbor命令行工具介绍)|Docker|2016-09-09|
-|27|[OpenStack使用ISO镜像启动云主机](http://int32bit.me/2016/08/01/OpenStack使用ISO镜像启动云主机)|OpenStack|2016-08-01|
-|28|[Sparse文件处理和传输](http://int32bit.me/2016/06/01/Sparse文件处理和传输)|Linux|2016-06-01|
-|29|[如何构建OpenStack镜像](http://int32bit.me/2016/05/28/如何构建OpenStack镜像)|OpenStack|2016-05-28|
-|30|[Ceph-Pool操作总结](http://int32bit.me/2016/05/19/Ceph-Pool操作总结)|Ceph|2016-05-19|
-|31|[Docker实现跨主机通信](http://int32bit.me/2016/05/10/Docker实现跨主机通信)|Docker|2016-05-10|
-|32|[Linux常用网络工具总结](http://int32bit.me/2016/05/04/Linux常用网络工具总结)|Linux|2016-05-04|
-|33|[使用Harbor构建私有镜像仓库](http://int32bit.me/2016/04/18/使用Harbor构建私有镜像仓库)|Docker|2016-04-18|
-|34|[谈谈Docker数据容器](http://int32bit.me/2016/04/14/谈谈Docker数据容器)|Docker|2016-04-14|
-|35|[虚拟机、Docker和Hyper技术比较](http://int32bit.me/2016/03/20/虚拟机、Docker和Hyper技术比较)|Docker|2016-03-20|
-|36|[使用bash关联数组统计单词频数](http://int32bit.me/2015/03/18/使用bash关联数组统计单词频数)|Linux, bash|2015-03-18|
-|37|[bash字符串前美元符号的作用](http://int32bit.me/2014/11/30/bash字符串前美元符号的作用)|Linux, bash|2014-11-30|
-|38|[随机算法和洗牌算法](http://int32bit.me/2014/10/24/随机算法和洗牌算法)|Algorithm|2014-10-24|
-|39|[小米2013校招笔试算法题-朋友圈](http://int32bit.me/2013/10/27/小米2013校招笔试算法题-朋友圈)|Algorithm|2013-10-27|
+|1|[深入浅出OpenStack安全组实现原理](http://int32bit.me/2019/06/01/深入浅出OpenStack安全组实现原理)|OpenStack|2019-06-01|
+|2|[如何阅读OpenStack源码(更新版)](http://int32bit.me/2019/04/29/如何阅读OpenStack源码(更新版))|OpenStack|2019-04-29|
+|3|[OpenStack断点调试方法](http://int32bit.me/2019/04/25/OpenStack断点调试方法)||2019-04-25|
+|4|[OpenStack-Ironic安装部署参考](http://int32bit.me/2019/04/23/OpenStack-Ironic安装部署参考)|OpenStack|2019-04-23|
+|5|[OpenStack安全加固探索与实践](http://int32bit.me/2019/04/19/OpenStack安全加固探索与实践)||2019-04-19|
+|6|[基于Ironic实现X86裸机自动化装机实践与优化](http://int32bit.me/2019/03/18/基于Ironic实现X86裸机自动化装机实践与优化)||2019-03-18|
+|7|[OpenStack-metadata服务原理解析](http://int32bit.me/2018/07/01/OpenStack-metadata服务原理解析)|OpenStack|2018-07-01|
+|8|[OpenStack资源管理层次模型](http://int32bit.me/2018/05/21/OpenStack资源管理层次模型)|OpenStack|2018-05-21|
+|9|[OpenStack高级特性简介](http://int32bit.me/2018/05/17/OpenStack高级特性简介)|OpenStack|2018-05-17|
+|10|[OpenStack使用Ceph存储，Ceph到底做了什么](http://int32bit.me/2017/11/23/OpenStack使用Ceph存储，Ceph到底做了什么)|OpenStack, Ceph|2017-11-23|
+|11|[Docker使用OpenStack Cinder持久化volume原理分析及实践](http://int32bit.me/2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践)|OpenStack, Docker|2017-10-04|
+|12|[OpenStack中那些少见但很有用的操作](http://int32bit.me/2017/09/25/OpenStack中那些少见但很有用的操作)|OpenStack|2017-09-25|
+|13|[OpenStack虚拟机挂载数据卷过程分析](http://int32bit.me/2017/09/08/OpenStack虚拟机挂载数据卷过程分析)|OpenStack|2017-09-08|
+|14|[OpenStack工作流服务Mistral项目简介](http://int32bit.me/2017/09/03/OpenStack工作流服务Mistral项目简介)|OpenStack|2017-09-03|
+|15|[如何阅读OpenStack源码](http://int32bit.me/2017/08/28/如何阅读OpenStack源码)|OpenStack|2017-08-28|
+|16|[OpenStack数据库版本控制工具简介](http://int32bit.me/2017/08/24/OpenStack数据库版本控制工具简介)|OpenStack, Python|2017-08-24|
+|17|[Cinder数据卷备份原理和实践](http://int32bit.me/2017/03/30/Cinder数据卷备份原理和实践)|OpenStack|2017-03-30|
+|18|[cinder-volume服务如何实现AA高可用](http://int32bit.me/2017/03/16/cinder-volume服务如何实现AA高可用)|OpenStack|2017-03-16|
+|19|[Ceph-RBD-mirror功能介绍](http://int32bit.me/2017/01/24/Ceph-RBD-mirror功能介绍)|Ceph, OpenStack|2017-01-24|
+|20|[聊聊Nova-compute-driver的那些趣事](http://int32bit.me/2017/01/07/聊聊Nova-compute-driver的那些趣事)|OpenStack|2017-01-07|
+|21|[深圳黑客松之旅](http://int32bit.me/2016/12/03/深圳黑客松之旅)|OpenStack|2016-12-03|
+|22|[OpenStack虚拟机保护的几种方法](http://int32bit.me/2016/11/09/OpenStack虚拟机保护的几种方法)|OpenStack|2016-11-09|
+|23|[OpenStack对象模型以及数据库访问机制](http://int32bit.me/2016/11/01/OpenStack对象模型以及数据库访问机制)|OpenStack|2016-11-01|
+|24|[OpenStack使用Ceph存储后端创建虚拟机快照原理剖析](http://int32bit.me/2016/10/25/OpenStack使用Ceph存储后端创建虚拟机快照原理剖析)|Ceph, OpenStack|2016-10-25|
+|25|[OpenStack服务心跳机制和状态监控](http://int32bit.me/2016/10/24/OpenStack服务心跳机制和状态监控)|OpenStack|2016-10-24|
+|26|[配置高效科学的Linux开发环境](http://int32bit.me/2016/10/03/配置高效科学的Linux开发环境)|Linux|2016-10-03|
+|27|[Harbor命令行工具介绍](http://int32bit.me/2016/09/09/Harbor命令行工具介绍)|Docker|2016-09-09|
+|28|[OpenStack使用ISO镜像启动云主机](http://int32bit.me/2016/08/01/OpenStack使用ISO镜像启动云主机)|OpenStack|2016-08-01|
+|29|[Sparse文件处理和传输](http://int32bit.me/2016/06/01/Sparse文件处理和传输)|Linux|2016-06-01|
+|30|[如何构建OpenStack镜像](http://int32bit.me/2016/05/28/如何构建OpenStack镜像)|OpenStack|2016-05-28|
+|31|[Ceph-Pool操作总结](http://int32bit.me/2016/05/19/Ceph-Pool操作总结)|Ceph|2016-05-19|
+|32|[Docker实现跨主机通信](http://int32bit.me/2016/05/10/Docker实现跨主机通信)|Docker|2016-05-10|
+|33|[Linux常用网络工具总结](http://int32bit.me/2016/05/04/Linux常用网络工具总结)|Linux|2016-05-04|
+|34|[使用Harbor构建私有镜像仓库](http://int32bit.me/2016/04/18/使用Harbor构建私有镜像仓库)|Docker|2016-04-18|
+|35|[谈谈Docker数据容器](http://int32bit.me/2016/04/14/谈谈Docker数据容器)|Docker|2016-04-14|
+|36|[虚拟机、Docker和Hyper技术比较](http://int32bit.me/2016/03/20/虚拟机、Docker和Hyper技术比较)|Docker|2016-03-20|
+|37|[使用bash关联数组统计单词频数](http://int32bit.me/2015/03/18/使用bash关联数组统计单词频数)|Linux, bash|2015-03-18|
+|38|[bash字符串前美元符号的作用](http://int32bit.me/2014/11/30/bash字符串前美元符号的作用)|Linux, bash|2014-11-30|
+|39|[随机算法和洗牌算法](http://int32bit.me/2014/10/24/随机算法和洗牌算法)|Algorithm|2014-10-24|
+|40|[小米2013校招笔试算法题-朋友圈](http://int32bit.me/2013/10/27/小米2013校招笔试算法题-朋友圈)|Algorithm|2013-10-27|
