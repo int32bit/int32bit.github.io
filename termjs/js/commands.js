@@ -195,6 +195,12 @@ function do_reload(args)
     return "";
 }
 
+function do_reset(args)
+{
+    top.location.reload();
+    return "";
+}
+
 function do_background(args)
 {
     changeBackground();
