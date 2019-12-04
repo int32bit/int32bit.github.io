@@ -494,6 +494,7 @@ else:
 
 另外需要注意的是Kubernetes默认创建的是`internal alb`，只能VPC内部访问，如果需要暴露给互联网，需要通过`alb.ingress.kubernetes.io/scheme`注解配置alb类型为`internet-facing`。ALB默认监听的HTTP端口为80，HTTPS端口为443，由于这些端口均需要ICP备案，因此这次测试通过`alb.ingress.kubernetes.io/listen-ports`配置监听器的HTTP端口为`18080`。
 
+
 我们查看创建的Ingress实例:
 
 ```
@@ -556,7 +557,28 @@ Connection: keep-alive
 
 ![aws ingress alb target group](/img/posts/Kubernetes与IaaS资源融合实践/aws_ingress_alb_target.png)
 
-我们发现target group和前面的LoadBalance配置完全一样，都是把Node的IP以及NodePort加到targets中。这也意味着添加到Ingress的Service必须是NodePort类型，当然LoadBalancer也是通过NodePort实现，因此也是没有问题的。
+我们发现target group和前面的LoadBalance配置完全一样，默认都是把Node的IP以及NodePort加到targets中。这也意味着添加到Ingress的Service必须是NodePort类型，当然LoadBalancer也是通过NodePort实现，因此也是没有问题的。
+
+不过如果使用aws-vpc模式，pod IP就是VPC IP，则可以直接通过配置alb.ingress.kubernetes.io/target-type注解配置使用ip模式，此时target为endpoint，即Pod IP和端口，不需要走kube-proxy，性能会更好：
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "alb-ingress"
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 18080}]'
+    alb.ingress.kubernetes.io/target-type: ip
+  labels:
+    app: test-nginx-ingress
+...
+```
+
+![alb-ip-target-type](/img/posts/Kubernetes与IaaS资源融合实践/alb-ip-target-type.png)
+
+更多配置参数请参考[Ingress annotations](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/)。
 
 ## 7 Cluster Autoscaler与AUTO SCALING
 
