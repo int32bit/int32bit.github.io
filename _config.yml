@@ -16,7 +16,7 @@ weibo_username:     316378881
 zhihu_username:     int32bit
 github_username:    int32bit
 twitter_username:  int32bit
-#facebook_username:  int32bit
+facebook_username:  int32bit
 
 # Build settings
 # from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
@@ -41,21 +41,13 @@ kramdown:
   input: GFM                            # use Github Flavored Markdown !important
   hard_wrap: false
 
-# Disqus settings
-disqus_username: int32bit
-# Duoshuo settings
-#duoshuo_username: int32bit
-# Share component is depend on Comment so we can NOT use share only.
-#duoshuo_share: true                     # set to false if you want to use Comment without Sharing
-
-
 # Analytics settings
 # Baidu Analytics
-ba_track_id: 2f615c9fc2d0100e5a6410b950fa688c
+# ba_track_id: 2f615c9fc2d0100e5a6410b950fa688c
 
 # Google Analytics
-ga_track_id: 'UA-76500579-1'            # Format: UA-xxxxxx-xx
-ga_domain: int32bit.github.io
+# ga_track_id: 'UA-76500579-1'            # Format: UA-xxxxxx-xx
+# ga_domain: int32bit.github.io
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
@@ -67,34 +59,34 @@ featured-tags: true                     # whether or not using Feature-Tags
 featured-condition-size: 1              # A tag will be featured if the size of it is more than this condition value
 
 # Friends
-friends: [
-    {
-        title: "cnblog博客地址",
-        href: "http://www.cnblogs.com/int32bit/"
-    },{
-        title: "麦子迈",
-        href: "http://www.wzxue.com/"
-    },{
-        title: "酷壳",
-        href: "http://coolshell.cn/"
-    },{
-        title: "陈沙克日志",
-        href: "http://www.chenshake.com/"
-    },{
-        title: "世民谈云计算",
-        href: "http://www.cnblogs.com/sammyliu/"
-    },{
-        title: "结构之法，算法之道",
-        href: "http://blog.csdn.net/v_july_v"
-    },{
-    },{
-        title: "阮一峰的网络日志",
-        href: "http://www.ruanyifeng.com/"
-    },{
-        title: "Leetcode解题",
-        href: "https://github.com/int32bit/leetcode"
-    },{
-        title: "依云's Blog",
-        href: "http://blog.lilydjwg.me/"
-    }
-]
+# friends: [
+#     {
+#         title: "cnblog博客地址",
+#         href: "http://www.cnblogs.com/int32bit/"
+#     },{
+#         title: "麦子迈",
+#         href: "http://www.wzxue.com/"
+#     },{
+#         title: "酷壳",
+#         href: "http://coolshell.cn/"
+#     },{
+#         title: "陈沙克日志",
+#         href: "http://www.chenshake.com/"
+#     },{
+#         title: "世民谈云计算",
+#         href: "http://www.cnblogs.com/sammyliu/"
+#     },{
+#         title: "结构之法，算法之道",
+#         href: "http://blog.csdn.net/v_july_v"
+#     },{
+#     },{
+#         title: "阮一峰的网络日志",
+#         href: "http://www.ruanyifeng.com/"
+#     },{
+#         title: "Leetcode解题",
+#         href: "https://github.com/int32bit/leetcode"
+#     },{
+#         title: "依云's Blog",
+#         href: "http://blog.lilydjwg.me/"
+#     }
+# ]
