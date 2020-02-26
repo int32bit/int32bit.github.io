@@ -9,7 +9,7 @@ fi
 POST_NAME=$(head -n 5 <"$POST_FILE" | awk '/title:/{print $2}')
 IMAGE_TARGET="./img/posts/$POST_NAME"
 mkdir -p "$IMAGE_TARGET"
-for img in $(grep -P '!\[.+\]\(.+\)' "$POST_FILE" | grep -Po '\(.+\)' | tr -d '()'); do
+for img in $(grep -P '!\[.*\]\(.+\)' "$POST_FILE" | grep -Po '\(.+\)' | tr -d '()'); do
     BASE_NAME=$(basename "$img")
     cp -vf "$IMAGE_SRC/$BASE_NAME" "$IMAGE_TARGET/$BASE_NAME"
 done
