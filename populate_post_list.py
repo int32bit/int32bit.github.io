@@ -3,7 +3,7 @@
 import os
 from glob import glob
 
-BLOG_URL = 'http://int32bit.me'
+BLOG_URL = 'http://int32bit.sh'
 
 
 def get_posts(post_dir="./_posts"):

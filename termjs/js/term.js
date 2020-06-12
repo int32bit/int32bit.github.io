@@ -56,7 +56,7 @@ function processInput(ev)
 	if (key == 13) {
 		var lastLine = $("#lastLine");
         var cmd = content
-		lastLine.before("<div class='output'>fgp@int32bit.me:~$&nbsp;" + cmd + "</div>");
+		lastLine.before("<div class='output'>fgp@int32bit.sh:~$&nbsp;" + cmd + "</div>");
 		lastLine.before("<div class='output'>" + execute(cmd) + "</div>");
 		input.html("");
 		/* 让滚动条到底部 */
